@@ -1,0 +1,19 @@
+OK:
+GET / HTTP/1.1
+Upgrade: WebSocket
+Connection: Upgrade
+Host: localhost
+Origin: file://
+Sec-WebSocket-Key1: 650x4 98742
+Sec-WebSocket-Key2: * h3 {Md 4 t3(   f57 73"#38 0 I
+
+\K–º!¯X
+HTTP/1.1 101 WebSocket Protocol Handshake
+Upgrade: WebSocket
+Connection: Upgrade
+Sec-WebSocket-Origin: file://
+Sec-WebSocket-Location: ws://localhost/
+
+?????\???LG?,
+
+-------------
