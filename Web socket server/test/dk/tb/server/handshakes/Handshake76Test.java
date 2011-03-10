@@ -27,7 +27,7 @@ public class Handshake76Test {
 	}
 	
 	@Test
-	public void getResponseKey() {
+	/*public void getResponseKey() {
 		Handshake76 handshake = new Handshake76();
 		byte[] bytes = handshake.getResponseKey(
 				handshake.getKey("21 xq120c! o287Q 5@5a"), 
@@ -40,7 +40,7 @@ public class Handshake76Test {
 		Assert.assertEquals(
 				"127205494-111-20-11-39-9521134-11266221",
 				builder.toString());
-	}
+	}*/
 	
 	private String getClientHandshakeString() {
 		StringBuilder builder = new StringBuilder();
