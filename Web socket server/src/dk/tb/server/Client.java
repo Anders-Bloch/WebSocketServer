@@ -2,50 +2,35 @@ package dk.tb.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dk.tb.server.handshakes.Handshake76;
-import dk.tb.server.util.RequestHeaderMap;
-
-class Client extends Thread {
+public class Client extends Thread {
     
-	private final Socket client;
+	//private final Socket client;
 	private final ClientPool pool;
-	private OutputStream out = null;
+	
+	private final OutputStream out;
+	private final BufferedReader in;
 	
 	private final Logger logger = LoggerFactory.getLogger(Client.class);
 	
-	public Client(Socket clientSocket, ClientPool pool) {
+	public Client(ClientPool pool, OutputStream out, BufferedReader in) {
         super();
         logger.info("Initilazing new Client");
-        client = clientSocket;
         this.pool = pool;
+        this.out = out;
+        this.in = in;
     }
 	
     public void run() {
     	logger.info("Running client");
 		try {
-			out = client.getOutputStream();
-			BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			StringBuilder builder = new StringBuilder();
-			while(in.ready()) {
-				builder.append(Character.toChars(in.read()));
-			}
-			logger.info(builder.toString());
-			Handshake handshake = new Handshake76();
-			byte[] bytes = handshake.createResponseHandshake(new RequestHeaderMap().extractHeader(builder.toString()));
-			
-			for (int i = 0; i < bytes.length; i++) {
-				out.write(bytes[i]);
-			}
-			
 			List<Integer> input = new ArrayList<Integer>();
 			
 			while(true) {

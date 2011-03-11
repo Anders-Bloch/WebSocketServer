@@ -16,8 +16,8 @@ public class Handshake76 implements Handshake {
 	
 	public byte[] createResponseHandshake(Map<Keys, String> requestMap) {
 		byte[] resKey = getResponseKey(
-				getKey(requestMap.get(Keys.KEY1)), 
-				getKey(requestMap.get(Keys.KEY2)),
+				getPart(requestMap.get(Keys.KEY1)), 
+				getPart(requestMap.get(Keys.KEY2)),
 				requestMap.get(Keys.KEY3).getBytes());
 		byte[] header = getHeader(requestMap).getBytes();
 		int totalBytes = header.length + resKey.length;
@@ -58,21 +58,33 @@ public class Handshake76 implements Handshake {
 		return Long.parseLong(numbers) / numberOfSpaces;
 	}
 	
-	public byte[] getResponseKey(long key1, long key2, byte[] key3) {
+	private byte[] getPart(String key) {
+		long keyNumber = Long.parseLong(key.replaceAll("[^0-9]",""));
+		long keySpace = key.split("\u0020").length - 1;
+		long part = new Long(keyNumber / keySpace);
+		return new byte[] {
+				(byte)( part >> 24 ),
+				(byte)( (part << 8) >> 24 ),
+				(byte)( (part << 16) >> 24 ),
+				(byte)( (part << 24) >> 24 )      
+		};
+	}
+	
+	public byte[] getResponseKey(byte[] key1, byte[] key2, byte[] key3) {
 		byte[] bytes = new byte[16];
-		byte[] key1Bytes = new BigInteger(key1+"").toByteArray();
-		byte[] key2Bytes = new BigInteger(key2+"").toByteArray();
-		logger.info("Key1 length: " + key1Bytes.length);
-		logger.info("Key2 length: " + key2Bytes.length);
+		//byte[] key1Bytes = new BigInteger(key1+"").toByteArray();
+		//byte[] key2Bytes = new BigInteger(key2+"").toByteArray();
+		logger.info("Key1 length: " + key1.length);
+		logger.info("Key2 length: " + key2.length);
 		logger.info("Key3 length: " + key3.length);
 		int keyIndex = 0;
 		//Add first key
-		for (int i = 0; i < key1Bytes.length; i++, keyIndex++) {
-			bytes[keyIndex] = key1Bytes[i];
+		for (int i = 0; i < key1.length; i++, keyIndex++) {
+			bytes[keyIndex] = key1[i];
 		}
 		//Add second key
-		for (int i = 0; i < key2Bytes.length; i++, keyIndex++) {
-			bytes[keyIndex] = key2Bytes[i];
+		for (int i = 0; i < key2.length; i++, keyIndex++) {
+			bytes[keyIndex] = key2[i];
 		}
 		//Add third key
 		for (int i = 0; i < key3.length; i++, keyIndex++) {
