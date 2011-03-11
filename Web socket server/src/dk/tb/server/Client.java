@@ -52,7 +52,7 @@ class Client extends Thread {
 				if(in.ready()) {
 					int b = in.read();
 					logger.info("Input: " + b);
-					if(b == 711) {
+					if(b == 255) {
 						builder = new StringBuilder();
 						for (Integer i : input) {
 							builder.append(Character.toChars(i));
