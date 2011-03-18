@@ -6,6 +6,7 @@ import org.junit.*;
 
 import dk.tb.server.util.Keys;
 import dk.tb.server.util.RequestHeaderMap;
+import dk.tb.websocket.handshakes.Handshake76;
 
 
 public class Handshake76Test {
