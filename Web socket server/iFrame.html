@@ -1,0 +1,44 @@
+<html>
+	<header>
+		<title>IFrame Test</title>
+		<script type="text/javascript" >
+		
+			function addInput(received_msg) {
+				var txt = document.createTextNode(received_msg);
+				var li = document.createElement('li');
+				li.appendChild(txt);
+				document.getElementById('inputData').appendChild(li);
+				document.getElementById('text').value = '';
+			}
+		
+			function sendText() {
+				var xmlhttp;
+				if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+					xmlhttp = new XMLHttpRequest();
+				} else {// code for IE
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				xmlhttp.onreadystatechange = function() { 
+					if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+					    //document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+					}
+				}
+				xmlhttp.open("GET","/iFrame?text=" + document.getElementById('text').value,true);
+				xmlhttp.send();
+			}
+			
+		</script>
+	</header>
+	<body>
+		<a href="/iFrame?Connect" target="hiddenIFrame" >Connect to chat!</a>
+		<input id="text" name="text" type="text" value="" />
+		<input id="button" name="button" type="button" onclick="javascript:sendText();" value="Say hello!" />
+		<iframe name="hiddenIFrame" id="hiddenIFrame" frameborder="0" height="0" width="100%" ></iframe>
+		<div>
+			<ol id="inputData">
+			
+			</ol>	
+		</div>
+	</body>
+</html>
+
