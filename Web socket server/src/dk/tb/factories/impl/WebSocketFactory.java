@@ -1,18 +1,35 @@
 package dk.tb.factories.impl;
 
+import java.io.IOException;
+import java.net.Socket;
+
+import dk.tb.clients.Client;
+import dk.tb.clients.impl.WebSocketClient;
+import dk.tb.factories.PoolAndClientFactory;
 import dk.tb.factories.ServerFactory;
-import dk.tb.handler.RequestHandler;
-import dk.tb.handler.impl.WebSocketRequestHandler;
-import dk.tb.pool.ClientPool;
-import dk.tb.pool.impl.CommonClientPool;
+import dk.tb.handlers.RequestHandler;
+import dk.tb.handlers.impl.WebSocketRequestHandler;
+import dk.tb.pools.ClientPool;
+import dk.tb.pools.impl.CommonClientPool;
 
 public class WebSocketFactory implements ServerFactory {
 	
-	private ClientPool pool = new CommonClientPool();
+	private final ClientPool pool = new CommonClientPool();
 
 	@Override
 	public RequestHandler getRequestHandler() {
-		return new WebSocketRequestHandler(pool);
+		return new WebSocketRequestHandler(new PoolAndClientFactory() {
+			
+			@Override
+			public ClientPool getPool() {
+				return pool;
+			}
+			
+			@Override
+			public Client getNewClient(Socket socket) throws IOException {
+				return new WebSocketClient(pool, socket);
+			}
+		});
 	}
 
 }

@@ -6,6 +6,9 @@ import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dk.tb.handlers.util.Keys;
+import dk.tb.handlers.util.RequestHeaderMap;
+
 
 public class RequestHeaderMapTest {
 	

@@ -1,4 +1,4 @@
-package dk.tb.handler.impl;
+package dk.tb.handlers.impl;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -7,16 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dk.tb.clients.Client;
-import dk.tb.clients.impl.XHRPollClient;
-import dk.tb.pool.ClientPool;
+import dk.tb.factories.PoolAndClientFactory;
 
 public class XHRPollRequestHandler extends AbstractRequestHandler {
 	
 	private final Logger logger = LoggerFactory.getLogger(XHRPollRequestHandler.class);
-	private ClientPool pool;
 	
-	public XHRPollRequestHandler(ClientPool pool) {
-		this.pool = pool;
+	public XHRPollRequestHandler(PoolAndClientFactory factory) {
+		super(factory);
 	}
 
 	@Override
@@ -26,7 +24,7 @@ public class XHRPollRequestHandler extends AbstractRequestHandler {
 			logger.info("Text update event: " + text);
 			pool.callAll(text);
 		} else if(path.contains("/xhrLongPolling?Connect")) {
-			Client client = new XHRPollClient(socket);
+			Client client = factory.getNewClient(socket);
 			pool.addClient(client);
 			logger.info("New client added");
 		}

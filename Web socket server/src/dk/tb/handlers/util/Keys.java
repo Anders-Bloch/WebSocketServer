@@ -1,4 +1,4 @@
-package dk.tb.server.util;
+package dk.tb.handlers.util;
 
 public enum Keys {
 	PATH("empty"),

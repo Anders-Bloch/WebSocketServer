@@ -1,4 +1,4 @@
-package dk.tb.pool;
+package dk.tb.pools;
 
 import dk.tb.clients.Client;
 

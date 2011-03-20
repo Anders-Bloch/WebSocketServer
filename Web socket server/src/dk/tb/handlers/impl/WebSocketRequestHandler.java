@@ -1,6 +1,5 @@
-package dk.tb.handler.impl;
+package dk.tb.handlers.impl;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
@@ -8,25 +7,24 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dk.tb.clients.impl.WebSocketClient;
-import dk.tb.pool.ClientPool;
-import dk.tb.server.util.Keys;
-import dk.tb.websocket.handshakes.Handshake;
-import dk.tb.websocket.handshakes.Handshake76;
+import dk.tb.clients.Client;
+import dk.tb.factories.PoolAndClientFactory;
+import dk.tb.handlers.handshakes.Handshake;
+import dk.tb.handlers.handshakes.Handshake76;
+import dk.tb.handlers.util.Keys;
 
 public class WebSocketRequestHandler extends AbstractRequestHandler {
 	
 	private final Logger logger = LoggerFactory.getLogger(WebSocketRequestHandler.class);
-	private ClientPool pool;
 	
-	public WebSocketRequestHandler(ClientPool pool) {
-		this.pool = pool;
+	public WebSocketRequestHandler(PoolAndClientFactory factory) {
+		super(factory);
 	}
 
 	@Override
 	public void handleRun() throws IOException {
 		writeOutput(out, header);
-		startClient(out, in);
+		startClient();
 	}
 
 	private void writeOutput(OutputStream out, Map<Keys, String> header) throws IOException {
@@ -38,9 +36,9 @@ public class WebSocketRequestHandler extends AbstractRequestHandler {
 		out.flush();
 	}
 
-	private void startClient(OutputStream out, BufferedReader in) {
-		WebSocketClient client = new WebSocketClient(pool,out,in);
+	private void startClient() throws IOException {
+		Client client = factory.getNewClient(socket);
 		pool.addClient(client);
-		client.start();
+		((Thread)client).start();
 	}
 }

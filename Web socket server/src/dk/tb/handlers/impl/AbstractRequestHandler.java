@@ -1,4 +1,4 @@
-package dk.tb.handler.impl;
+package dk.tb.handlers.impl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,28 +10,38 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dk.tb.handler.RequestHandler;
-import dk.tb.server.util.Keys;
-import dk.tb.server.util.RequestHeaderMap;
-import dk.tb.server.util.ResourceRequestHandler;
+import dk.tb.factories.PoolAndClientFactory;
+import dk.tb.handlers.RequestHandler;
+import dk.tb.handlers.util.Keys;
+import dk.tb.handlers.util.RequestHeaderMap;
+import dk.tb.handlers.util.ResourceRequestHandler;
+import dk.tb.pools.ClientPool;
 
 public abstract class AbstractRequestHandler implements RequestHandler {
 	
 	private final ResourceRequestHandler resourceHandler = new ResourceRequestHandler();
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	protected final PoolAndClientFactory factory;
+	protected final ClientPool pool;
+
 	protected Socket socket;
 	protected OutputStream out = null;
-	protected BufferedReader in = null;
-	protected String path;
+
 	protected Map<Keys, String> header;
+	protected String path;
+	
+	public AbstractRequestHandler(PoolAndClientFactory factory) {
+		this.pool = factory.getPool();
+		this.factory = factory;
+	}
 	
 	@Override
 	public void run() {
 		try {
 			out = socket.getOutputStream();
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			
-			StringBuilder builder = readInput(in);
+			StringBuilder builder = readInput(
+					new BufferedReader(new InputStreamReader(socket.getInputStream())));
 			
 			header = new RequestHeaderMap().extractHeader(builder.toString());
 			path = header.get(Keys.PATH);
@@ -39,8 +49,6 @@ public abstract class AbstractRequestHandler implements RequestHandler {
 				String output = resourceHandler.resolveResource(path);
 				out.write(output.getBytes());
 				out.flush();
-				out.close();
-				in.close();
 				socket.close();
 			} else {
 				handleRun();

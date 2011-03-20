@@ -1,4 +1,4 @@
-package dk.tb.websocket.handshakes;
+package dk.tb.handlers.handshakes;
 
 import java.security.MessageDigest;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dk.tb.server.util.Keys;
+import dk.tb.handlers.util.Keys;
 
 public class Handshake76 implements Handshake {
 	

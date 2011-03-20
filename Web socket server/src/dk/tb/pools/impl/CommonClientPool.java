@@ -1,4 +1,4 @@
-package dk.tb.pool.impl;
+package dk.tb.pools.impl;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dk.tb.clients.Client;
-import dk.tb.pool.ClientPool;
+import dk.tb.pools.ClientPool;
 
 
 public class CommonClientPool implements ClientPool {

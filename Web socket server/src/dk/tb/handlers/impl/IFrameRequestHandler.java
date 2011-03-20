@@ -1,4 +1,4 @@
-package dk.tb.handler.impl;
+package dk.tb.handlers.impl;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -7,16 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dk.tb.clients.Client;
-import dk.tb.clients.impl.IFrameClient;
-import dk.tb.pool.ClientPool;
+import dk.tb.factories.PoolAndClientFactory;
 
 public class IFrameRequestHandler extends AbstractRequestHandler {
 	
 	private final Logger logger = LoggerFactory.getLogger(IFrameRequestHandler.class);
-	private ClientPool pool;
-	
-	public IFrameRequestHandler(ClientPool pool) {
-		this.pool = pool;
+
+	public IFrameRequestHandler(PoolAndClientFactory factory) {
+		super(factory);
 	}
 
 	@Override
@@ -27,11 +25,10 @@ public class IFrameRequestHandler extends AbstractRequestHandler {
 			pool.callAll(text);
 			out.write("HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Length: 0\r\nConnection: Keep-Alive\r\n\r\n".getBytes());
 			out.flush();
-			in.close();
-			out.close();
+			socket.close();
 		} else if(path.contains("/iFrame?Connect")) {
 			logger.info("New client added");
-			Client client = new IFrameClient(out);
+			Client client = factory.getNewClient(socket);
 			pool.addClient(client);
 			StringBuilder result = new StringBuilder();
 			result.append("HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nTransfer-Encoding: chunked\r\n\r\n");

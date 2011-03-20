@@ -4,9 +4,9 @@ import java.util.Map;
 
 import org.junit.*;
 
-import dk.tb.server.util.Keys;
-import dk.tb.server.util.RequestHeaderMap;
-import dk.tb.websocket.handshakes.Handshake76;
+import dk.tb.handlers.handshakes.Handshake76;
+import dk.tb.handlers.util.Keys;
+import dk.tb.handlers.util.RequestHeaderMap;
 
 
 public class Handshake76Test {

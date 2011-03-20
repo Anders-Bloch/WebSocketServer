@@ -12,7 +12,7 @@ public class IFrameClient implements Client {
 	
 	private final Logger logger = LoggerFactory.getLogger(IFrameClient.class);
 	private final OutputStream out;
-	
+
 	public IFrameClient(OutputStream out) {
 		this.out = out;
 	}

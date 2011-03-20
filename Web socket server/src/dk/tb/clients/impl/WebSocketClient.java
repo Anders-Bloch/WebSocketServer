@@ -2,7 +2,9 @@ package dk.tb.clients.impl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dk.tb.clients.Client;
-import dk.tb.pool.ClientPool;
+import dk.tb.pools.ClientPool;
 
 
 public class WebSocketClient extends Thread implements Client {
@@ -22,12 +24,12 @@ public class WebSocketClient extends Thread implements Client {
 	
 	private final Logger logger = LoggerFactory.getLogger(WebSocketClient.class);
 	
-	public WebSocketClient(ClientPool pool, OutputStream out, BufferedReader in) {
+	public WebSocketClient(ClientPool pool, Socket socket) throws IOException {
         super();
         logger.info("Initilazing new Client");
         this.pool = pool;
-        this.out = out;
-        this.in = in;
+        this.out = socket.getOutputStream();
+        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 	
     public void run() {

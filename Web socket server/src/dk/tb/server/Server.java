@@ -10,8 +10,7 @@ import org.slf4j.LoggerFactory;
 import dk.tb.factories.ServerFactory;
 import dk.tb.factories.ServerFactoryInit;
 import dk.tb.factories.ServerFactoryInit.ServerInitParam;
-import dk.tb.handler.RequestHandler;
-import dk.tb.server.util.ResourceRequestHandler;
+import dk.tb.handlers.RequestHandler;
 
 public class Server {
 	
