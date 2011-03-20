@@ -17,7 +17,6 @@
 						var li = document.createElement('li');
 						li.appendChild(txt);
 						document.getElementById('inputData').appendChild(li);
-						document.getElementById('text1').value = '';
 					};
 					ws.onclose = function() {
 						// websocket is closed.
@@ -38,8 +37,8 @@
 		<div id="message">
 		</div>
 		<br >
-		<input id="text1" name="text1" type="text" value="" />
-		<input id="button2" onClick="javascript:ws.send(document.getElementById('text1').value)" name="button2" type="button" value="Say hello!" />
+		<input id="text" name="text" type="text" value="" />
+		<input id="button2" onClick="javascript:ws.send(document.getElementById('text').value);document.getElementById('text').value = '';" name="button2" type="button" value="Say hello!" />
 		<div>
 			<ol id="inputData">
 			

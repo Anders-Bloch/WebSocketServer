@@ -8,7 +8,6 @@
 				var li = document.createElement('li');
 				li.appendChild(txt);
 				document.getElementById('inputData').appendChild(li);
-				document.getElementById('text').value = '';
 			}
 		
 			function sendText() {
@@ -24,6 +23,7 @@
 					}
 				}
 				xmlhttp.open("GET","/xhrLongPolling?text=" + document.getElementById('text').value,true);
+				document.getElementById('text').value = '';
 				xmlhttp.send();
 			}
 

@@ -31,7 +31,7 @@ public class IFrameRequestHandler extends AbstractRequestHandler {
 			Client client = factory.getNewClient(socket);
 			pool.addClient(client);
 			StringBuilder result = new StringBuilder();
-			result.append("HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nTransfer-Encoding: chunked\r\n\r\n");
+			result.append("HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nConnection: Keep-Alive\r\nTransfer-Encoding: chunked\r\n\r\n");
 			String message = "<script type='text/javascript'>window.parent.addInput('Connected')\r\n" +
 					"//482348298349828348n2 438 238489028934809823948 2 49892483098 24 8 214388 2348 82 8430 9 2438 9823984908293489821934890820943892184982398498598349859823  85 832859823945098349 853 829834985 8324 50823495983 904509832904 58 35834 58 3 58308458235" +
 					"//482348298349828348n2 438 238489028934809823948 2 49892483098 24 8 214388 2348 82 8430 9 2438 9823984908293489821934890820943892184982398498598349859823  85 832859823945098349 853 829834985 8324 50823495983 904509832904 58 35834 58 3 58308458235" +

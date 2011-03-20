@@ -17,7 +17,6 @@ public class RequestHeaderMap {
 	    int start = lines[0].indexOf("GET")+4;
 	    int end = lines[0].indexOf("HTTP")-1;
 	    logger.info("Lines in header: " + lines.length);
-	    logger.info("Line 1: " + lines[0]);
 	    result.put(Keys.PATH, lines[0].substring(start, end).trim());
 	    //Add all : separated values 
 	    int i = 1;
