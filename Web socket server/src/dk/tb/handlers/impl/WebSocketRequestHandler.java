@@ -39,6 +39,7 @@ public class WebSocketRequestHandler extends AbstractRequestHandler {
 	private void startClient() throws IOException {
 		Client client = factory.getNewClient(socket);
 		pool.addClient(client);
-		((Thread)client).start();
+		factory.getThreadPool().runTask((Runnable)client);
+		//((Thread)client).start(); Udskiftet med thread pool
 	}
 }

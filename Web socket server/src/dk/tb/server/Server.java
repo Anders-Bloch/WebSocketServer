@@ -19,8 +19,12 @@ public class Server {
 	 * @param args
 	 * @throws IOException 
 	 */
-	public static void main(String[] args) throws IOException {
-		new Server().init(ServerInitParam.getParam(args[0]));
+	public static void main(String[] args) {
+		try {
+			new Server().init(ServerInitParam.getParam(args[0]));
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
 	}
 	
 	public void init(ServerInitParam param) throws IOException {
@@ -33,7 +37,8 @@ public class Server {
 			logger.info("Client accepted");
 			RequestHandler requestHandler = factory.getRequestHandler();
 			requestHandler.handleRequest(clientSocket);
-			new Thread(requestHandler).start();
+			factory.getThreadPool().runTask(requestHandler);
+			//new Thread(requestHandler).start(); Udskriftet med thread pool
 			logger.info("Request turned over to handler");
 		}
 	}

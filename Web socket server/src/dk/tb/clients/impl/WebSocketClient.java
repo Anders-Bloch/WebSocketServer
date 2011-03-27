@@ -15,7 +15,7 @@ import dk.tb.clients.Client;
 import dk.tb.pools.ClientPool;
 
 
-public class WebSocketClient extends Thread implements Client {
+public class WebSocketClient implements Runnable, Client {
     
 	private final ClientPool pool;
 	
