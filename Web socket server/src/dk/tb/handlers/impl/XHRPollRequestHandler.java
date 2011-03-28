@@ -23,6 +23,9 @@ public class XHRPollRequestHandler extends AbstractRequestHandler {
 			String text = URLDecoder.decode(path.substring(path.indexOf("text=")+5, path.length()));
 			logger.info("Text update event: " + text);
 			pool.callAll(text);
+			out.write("HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Length: 0\r\nConnection: Keep-Alive\r\n\r\n".getBytes());
+			out.flush();
+			socket.close();
 		} else if(path.contains("/xhrLongPolling?Connect")) {
 			Client client = factory.getNewClient(socket);
 			pool.addClient(client);

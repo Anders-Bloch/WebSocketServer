@@ -39,17 +39,12 @@ public abstract class AbstractRequestHandler implements RequestHandler {
 	public void run() {
 		try {
 			out = socket.getOutputStream();
-			
 			StringBuilder builder = readInput(
 					new BufferedReader(new InputStreamReader(socket.getInputStream())));
-			
 			header = new RequestHeaderMap().extractHeader(builder.toString());
 			path = header.get(Keys.PATH);
 			if(path != null && resourceHandler.isResourceRequest(path)) {
-				String output = resourceHandler.resolveResource(path);
-				out.write(output.getBytes());
-				out.flush();
-				socket.close();
+				handleResourceRequest();
 			} else {
 				handleRun();
 			}
@@ -57,8 +52,15 @@ public abstract class AbstractRequestHandler implements RequestHandler {
 			logger.error(e.getMessage());
 		}
 	}
-	
+
 	public abstract void handleRun() throws IOException;
+
+	private void handleResourceRequest() throws IOException {
+		String output = resourceHandler.resolveResource(path);
+		out.write(output.getBytes());
+		out.flush();
+		socket.close();
+	}
 	
 	@Override
 	public void handleRequest(Socket socket) throws IOException {

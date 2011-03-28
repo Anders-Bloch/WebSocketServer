@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TestHiddenIframe {
+public class TestWebSocket {
 
 	private String host;
 	private int port;
@@ -19,13 +19,13 @@ public class TestHiddenIframe {
 	long totalUpdateTime = 0;
 
 	
-	private int number_of_iterations = 4; 
-	private int time_between_iterations = 5000; //milliseconds
+	private int number_of_iterations = 10; 
+	private int time_between_iterations = 50; //milliseconds
 	
-	private int number_of_messages_to_send = 9;
-	private int time_between_messages = 1000; //milliseconds
+	private int number_of_messages_to_send = 10;
+	private int time_between_messages = 50; //milliseconds
 	
-	public TestHiddenIframe(String host, int port, int clientNumber) {
+	public TestWebSocket(String host, int port, int clientNumber) {
 		this.host = host;
 		this.port = port;
 		this.clientsNumber = clientNumber;
@@ -45,7 +45,7 @@ public class TestHiddenIframe {
 		int port = Integer.parseInt(args[1]);
 		int numberOfClients = Integer.parseInt(args[2]);
 
-		TestHiddenIframe testhiddenIframe = new TestHiddenIframe(host, port,numberOfClients);
+		TestWebSocket testhiddenIframe = new TestWebSocket(host, port,numberOfClients);
 		testhiddenIframe.runTest();
 
 	}
@@ -55,6 +55,7 @@ public class TestHiddenIframe {
 		try {
 
 			initClients();
+			
 			long connectTimestampStart = System.currentTimeMillis();
 			measureUpdateTime("connect");
 			long time_used_for_connect = System.currentTimeMillis()
@@ -70,7 +71,7 @@ public class TestHiddenIframe {
 			int iteration = 0;
 			long totalAverageTime = 0;
 			while (iteration < number_of_iterations) {
-				
+				totalBytesRecieved = 0;
 				int i = 0;
 				while (i < number_of_messages_to_send) {
 					i++;
@@ -79,7 +80,8 @@ public class TestHiddenIframe {
 					long sendTimestampstart = System.currentTimeMillis();
 					measureUpdateTime("update");
 					long time_used_for_update = System.currentTimeMillis()-sendTimestampstart;
-					// printResponse();
+					//printResponse();
+					totalUpdateTime += time_used_for_update;
 					System.out.println("Time needed to update all clients with message "
 									+ message
 									+ " : "
@@ -95,6 +97,7 @@ public class TestHiddenIframe {
 				Thread.sleep(time_between_iterations);
 				iteration++;
 			}
+			
 
 		} catch (Exception e) {
 			System.err.println(e);
@@ -121,17 +124,22 @@ public class TestHiddenIframe {
 							while (builder.indexOf("\r\n\r\n") == -1) {
 								builder.append(Character.toChars(in.read()));
 							}
+							//read the last line 
+							StringBuilder lastLineBuilder = new StringBuilder();
+							while (lastLineBuilder.length()< 16) {
+								lastLineBuilder.append(Character.toChars(in.read()));
+							}
+							builder.append(lastLineBuilder);
 						} else if (operation.equalsIgnoreCase("update")) {
-							// read first line
-							while (builder.indexOf("\r\n") == -1) {
-								builder.append(Character.toChars(in.read()));
+							// read until we meet the byte 0xFF
+							boolean read = true;
+							while (read) {
+								int b = in.read();
+								builder.append(Character.toChars(b));
+								if (b == 0xFF){
+									read = false;
+								}
 							}
-							// read second line
-							StringBuilder builder2Line = new StringBuilder();
-							while (builder2Line.indexOf("\r\n") == -1) {
-								builder2Line.append(Character.toChars(in.read()));
-							}
-							builder.append(builder2Line);
 						}
 
 						totalBytesRecieved += builder.length();
@@ -147,23 +155,16 @@ public class TestHiddenIframe {
 
 	
 	private void sendMessage(String message) throws IOException {
+		
 		System.out.println("sending message: " + message);
-		totalBytesRecieved = 0;
-		String sendTextRequest = "GET /iFrame?text="
-				+ message
-				+ " HTTP/1.1"
-				+ "\r\n"
-				+ "Accept:application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
-				+ "\r\n" + "Accept-Charset:ISO-8859-1,utf-8;q=0.7,*;q=0.3"
-				+ "\r\n" + "Connection:keep-alive" + "\r\n" + "Host:" + host
-				+ ":" + port + "\r\n" + "Referer:http://" + host + ":" + port
-				+ "/iFrame.html" + "\r\n\r\n";
-		Socket sendSocket = new Socket(host, port);
-		PrintStream out = new PrintStream(sendSocket.getOutputStream());
-		out.print(sendTextRequest);
-		out.flush();
-		if (sendSocket != null)
-			sendSocket.close(); // close connection
+
+		//find a socket to send the message through
+		Socket sendSocket = sockets.iterator().next();
+		
+		sendSocket.getOutputStream().write(0x00);
+		sendSocket.getOutputStream().write(message.getBytes());
+		sendSocket.getOutputStream().write(0xFF);
+		sendSocket.getOutputStream().flush();
 	}
 
 	private void initClients() {
@@ -173,14 +174,23 @@ public class TestHiddenIframe {
 			while (counter < clientsNumber) {
 				counter++;
 				StringBuffer req = new StringBuffer();
-				req.append("GET /iFrame?Connect HTTP/1.1"
-						+ "\r\n"
-						+ "Accept:application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
-						+ "\r\n"
-						+ "Accept-Charset:ISO-8859-1,utf-8;q=0.7,*;q=0.3"
-						+ "\r\n" + "Connection:keep-alive" + "\r\n" + "Host:"
-						+ host + ":" + port + "\r\n" + "Referer:http://" + host
-						+ ":" + port + "/iFrame.html" + "\r\n\r\n");
+				
+				req.append("GET / HTTP/1.1"
+				+ "\r\n"
+				+"Upgrade: WebSocket"
+				+ "\r\n"
+				+"Connection: Upgrade"
+				+ "\r\n"
+				+"Host: "+ host + ":" + port 
+				+ "\r\n"
+				+"Origin: http://"+ host + ":" + port 
+				+ "\r\n"
+				+"Sec-WebSocket-Key1: 3 201 1F555 65"
+				+ "\r\n"
+				+"Sec-WebSocket-Key2: 197 5 8    8=    9 806"
+				+ "\r\n"
+				+ "\r\n"
+				+"œ)nøîB..");
 				Socket socket = null;
 				try {
 					// create socket and connect
