@@ -41,12 +41,18 @@ public abstract class AbstractRequestHandler implements RequestHandler {
 			out = socket.getOutputStream();
 			StringBuilder builder = readInput(
 					new BufferedReader(new InputStreamReader(socket.getInputStream())));
-			header = new RequestHeaderMap().extractHeader(builder.toString());
-			path = header.get(Keys.PATH);
-			if(path != null && resourceHandler.isResourceRequest(path)) {
-				handleResourceRequest();
+			if(builder.toString().length() < 10) {
+				out.write("HTTP/1.1 400 OK\r\nExpires: -1\r\nCache-Control: private, max-age=0\r\nContent-Type: application/json; charset=UTF-8".getBytes());
+				out.flush();
+				socket.close();
 			} else {
-				handleRun();
+				header = new RequestHeaderMap().extractHeader(builder.toString());
+				path = header.get(Keys.PATH);
+				if(path != null && resourceHandler.isResourceRequest(path)) {
+					handleResourceRequest();
+				} else {
+					handleRun();
+				}
 			}
 		} catch(IOException e) {
 			logger.error(e.getMessage());
@@ -67,7 +73,7 @@ public abstract class AbstractRequestHandler implements RequestHandler {
 		this.socket = socket;
 	}
 
-	protected StringBuilder readInput(BufferedReader in) throws IOException {
+	/*protected StringBuilder readInput(BufferedReader in) throws IOException {
 		StringBuilder builder = new StringBuilder();
 		while(builder.indexOf("\r\n\r\n") == -1) {
 			builder.append(Character.toChars(in.read()));
@@ -77,6 +83,15 @@ public abstract class AbstractRequestHandler implements RequestHandler {
 				builder.append(Character.toChars(in.read()));
 			}
 		}
+		return builder;
+	}*/
+
+	protected StringBuilder readInput(BufferedReader in) throws IOException {
+		StringBuilder builder = new StringBuilder();
+		while(in.ready()) {
+			builder.append(Character.toChars(in.read()));
+		}
+		System.out.println(builder.toString());
 		return builder;
 	}
 }

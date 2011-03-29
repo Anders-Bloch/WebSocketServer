@@ -38,7 +38,7 @@ public class Server {
 			RequestHandler requestHandler = factory.getRequestHandler();
 			requestHandler.handleRequest(clientSocket);
 			factory.getThreadPool().runTask(requestHandler);
-			//new Thread(requestHandler).start(); Udskriftet med thread pool
+			//new Thread(requestHandler).start(); //Udskriftet med thread pool
 			logger.info("Request turned over to handler");
 		}
 	}

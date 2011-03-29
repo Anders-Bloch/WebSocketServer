@@ -19,11 +19,11 @@ public class TestHiddenIframe {
 	long totalUpdateTime = 0;
 
 	
-	private int number_of_iterations = 4; 
-	private int time_between_iterations = 5000; //milliseconds
+	private int number_of_iterations = 100; 
+	private int time_between_iterations = 1; //milliseconds
 	
-	private int number_of_messages_to_send = 9;
-	private int time_between_messages = 1000; //milliseconds
+	private int number_of_messages_to_send = 10;
+	private int time_between_messages = 1; //milliseconds
 	
 	public TestHiddenIframe(String host, int port, int clientNumber) {
 		this.host = host;
@@ -80,6 +80,7 @@ public class TestHiddenIframe {
 					measureUpdateTime("update");
 					long time_used_for_update = System.currentTimeMillis()-sendTimestampstart;
 					// printResponse();
+					totalUpdateTime += time_used_for_update;
 					System.out.println("Time needed to update all clients with message "
 									+ message
 									+ " : "

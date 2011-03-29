@@ -43,7 +43,9 @@ public class WebSocketClient implements Runnable, Client {
 				if(in.ready()) {
 					int b = in.read();
 					logger.info("Input: " + b);
-					if(b == 0xff) {
+					//if(b == 0xff) {
+					//if(b == 711) {
+					if(b == 48) {
 						builder = new StringBuilder();
 						for (Integer i : input) {
 							builder.append(Character.toChars(i));
@@ -52,6 +54,7 @@ public class WebSocketClient implements Runnable, Client {
 						input.clear();
 					} else {
 						if(b != 0x00) {
+							logger.info("Input added: " + b);
 							input.add(b);
 						}
 					}

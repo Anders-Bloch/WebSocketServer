@@ -20,10 +20,10 @@ public class TestWebSocket {
 
 	
 	private int number_of_iterations = 10; 
-	private int time_between_iterations = 50; //milliseconds
+	private int time_between_iterations = 500; //milliseconds
 	
 	private int number_of_messages_to_send = 10;
-	private int time_between_messages = 50; //milliseconds
+	private int time_between_messages = 500; //milliseconds
 	
 	public TestWebSocket(String host, int port, int clientNumber) {
 		this.host = host;

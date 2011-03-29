@@ -11,7 +11,7 @@ public class RequestHeaderMap {
 	private final Logger logger = LoggerFactory.getLogger(RequestHeaderMap.class);
 	
 	public Map<Keys, String> extractHeader(String header) {
-	    String[] lines = header.split("\r\n");
+	    String[] lines = header.split("\r?\n|\r");
 	    Map<Keys, String> result = new HashMap<Keys, String>();
 	    //Add path
 	    int start = lines[0].indexOf("GET")+4;

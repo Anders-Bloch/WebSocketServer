@@ -32,6 +32,7 @@ public class WebSocketRequestHandler extends AbstractRequestHandler {
 		byte[] bytes = handshake.createResponseHandshake(header);
 		for (int i = 0; i < bytes.length; i++) {
 			out.write(bytes[i]);
+			System.out.println(bytes[i]);
 		}
 		out.flush();
 	}
