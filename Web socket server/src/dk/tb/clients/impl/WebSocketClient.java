@@ -39,36 +39,33 @@ public class WebSocketClient implements Runnable, Client {
 			List<Integer> input = new ArrayList<Integer>();
 			
 			while(true) {
-				Thread.sleep(1);
-				if(in.ready()) {
-					int b = in.read();
-					logger.info("Input: " + b);
-					//if(b == 0xff) {
-					//if(b == 711) {
-					if(b == 48) {
-						builder = new StringBuilder();
-						for (Integer i : input) {
-							builder.append(Character.toChars(i));
-						}
-						pool.callAll(builder.toString());
-						input.clear();
-					} else {
-						if(b != 0x00) {
-							logger.info("Input added: " + b);
-							input.add(b);
-						}
+				int b = in.read();
+				//logger.info("Input: " + b);
+				//if(b == 0xff) {
+				//if(b == 711) {
+				if(b == 48) {
+					builder = new StringBuilder();
+					for (Integer i : input) {
+						builder.append(Character.toChars(i));
+					}
+					pool.callAll(builder.toString());
+					input.clear();
+				} else {
+					if(b != 0x00) {
+						input.add(b);
 					}
 				}
 			}
 		} catch (IOException e) {
 			logger.error("In client run: ",e);
-		} catch (InterruptedException e) {
+		} 
+		/*catch (InterruptedException e) {
 			logger.error(e.getMessage());
-		}
+		}*/
     }
     
     public void event(String event) throws IOException {
-		logger.info("To client (out): "+event);
+    	logger.info("Writing to stream, object:" + out.toString());
 		out.flush();
 		out.write(0x00);
 		out.write(event.getBytes());
