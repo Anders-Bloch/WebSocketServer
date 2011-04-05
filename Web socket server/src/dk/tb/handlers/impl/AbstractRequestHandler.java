@@ -91,7 +91,6 @@ public abstract class AbstractRequestHandler implements RequestHandler {
 		while(in.ready()) {
 			builder.append(Character.toChars(in.read()));
 		}
-		System.out.println(builder.toString());
 		return builder;
 	}
 }

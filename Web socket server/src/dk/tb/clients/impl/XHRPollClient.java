@@ -20,10 +20,9 @@ public class XHRPollClient implements Client {
 	
 	public void event(String event) throws IOException {
 		logger.info("Writing to stream, object:" + socket);
-		logger.info("Text update event: " + event);
 		OutputStream out = socket.getOutputStream();
 		out.write("HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Length: ".getBytes());
-		out.write(event.length());
+		out.write((event.length()+"").getBytes());
 		out.write("\r\n\r\n".getBytes());
 		out.write(event.getBytes());
 		out.flush();

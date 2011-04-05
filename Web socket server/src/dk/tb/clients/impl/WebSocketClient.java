@@ -40,10 +40,9 @@ public class WebSocketClient implements Runnable, Client {
 			
 			while(true) {
 				int b = in.read();
-				//logger.info("Input: " + b);
-				//if(b == 0xff) {
-				//if(b == 711) {
-				if(b == 48) {
+				//if(b == 0xff) { 	//PC
+				//if(b == 711) { 	//MAC OS
+				if(b == 48) { 		//JMeter Test
 					builder = new StringBuilder();
 					for (Integer i : input) {
 						builder.append(Character.toChars(i));
@@ -59,9 +58,6 @@ public class WebSocketClient implements Runnable, Client {
 		} catch (IOException e) {
 			logger.error("In client run: ",e);
 		} 
-		/*catch (InterruptedException e) {
-			logger.error(e.getMessage());
-		}*/
     }
     
     public void event(String event) throws IOException {
