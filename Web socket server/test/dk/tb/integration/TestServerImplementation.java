@@ -38,7 +38,7 @@ public abstract class TestServerImplementation {
 			initClients();
 
 			long connectTimestampStart = System.currentTimeMillis();
-			measureUpdateTime("connect");
+			verifyClientsUpdate("connect");
 			long time_used_for_connect = System.currentTimeMillis()
 					- connectTimestampStart;
 			System.out.println("Time spent to connect all clients: "
@@ -62,10 +62,12 @@ public abstract class TestServerImplementation {
 				while (i < number_of_messages_to_send) {
 					Thread.sleep(time_between_iterations);
 					i++;
-					String message = i + "message";
+					String message = i +"Hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello" 
+					+ "Hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello"
+					+ "message";
 					sendMessage(message);
 					long sendTimestampstart = System.currentTimeMillis();
-					measureUpdateTime("update");
+					verifyClientsUpdate("update");
 					long time_used_for_update = System.currentTimeMillis()
 							- sendTimestampstart;
 					if (time_used_for_update == 0) {
@@ -160,9 +162,7 @@ public abstract class TestServerImplementation {
 
 	}
 
-	public void sendMessage(String message) throws IOException {
-	}
-
-	public void measureUpdateTime(String operation) throws IOException {
-	}
+	public abstract void sendMessage(String message) throws IOException; 
+	public abstract void verifyClientsUpdate(String operation) throws IOException;
+	
 }

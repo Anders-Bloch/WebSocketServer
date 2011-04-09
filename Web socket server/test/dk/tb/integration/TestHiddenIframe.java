@@ -45,8 +45,8 @@ public class TestHiddenIframe extends TestServerImplementation {
 	}
 
 	
-	@Override
-	public void measureUpdateTime(String operation) throws IOException {
+	
+	public void verifyClientsUpdate(String operation) throws IOException {
 
 		ArrayList updatedClientsArray = new ArrayList(sockets.size());
 	
@@ -87,7 +87,7 @@ public class TestHiddenIframe extends TestServerImplementation {
 		}
 	}
 
-	@Override
+	
 	public void sendMessage(String message) throws IOException {
 		System.out.println("sending message: " + message);
 		//totalBytesRecieved = 0;

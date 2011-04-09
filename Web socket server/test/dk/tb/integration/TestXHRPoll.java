@@ -58,8 +58,8 @@ public class TestXHRPoll  extends TestServerImplementation {
 		
 	}
 
-	@Override
-	public void measureUpdateTime(String operation) throws IOException {
+	
+	public void verifyClientsUpdate(String operation) throws IOException {
 		if (operation.equalsIgnoreCase("connect")) {
 			return;
 		}	
@@ -94,7 +94,7 @@ public class TestXHRPoll  extends TestServerImplementation {
 		}
 		this.sockets = newSockets;
 	}
-	@Override
+	
 	public void sendMessage(String message) throws IOException {
 		System.out.println("sending message: " + message);
 		//totalBytesRecieved = 0;

@@ -54,8 +54,7 @@ public class TestWebSocket extends TestServerImplementation {
 		
 	}
 
-	@Override
-	public void measureUpdateTime(String operation) throws IOException {
+	public void verifyClientsUpdate(String operation) throws IOException {
 		ArrayList updatedClientsArray = new ArrayList(sockets.size());
 		// make sure all clients are updated
 		while (updatedClientsArray.size() < sockets.size()) {
@@ -99,7 +98,6 @@ public class TestWebSocket extends TestServerImplementation {
 		}
 	}
 
-	@Override
 	public void sendMessage(String message) throws IOException {
 		
 		System.out.println("sending message: " + message);
