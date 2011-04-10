@@ -31,11 +31,19 @@
 		<mkdir dir="${dist}/lib" />
 
 		<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-		<jar jarfile="${dist}/lib/Server-${DSTAMP}.jar" basedir="${build}" >
+		<jar jarfile="${dist}/lib/Server_${DSTAMP}.jar" basedir="${build}" >
 			<manifest>
 				<attribute name="Main-Class" value="dk.tb.server.Server"/>
+				<attribute name="Class-Path" value=". slf4j-api-1.6.1.jar slf4j-simple-1.6.1.jar" />
 			</manifest>
+			 <!--fileset file="*.html" /> -->
+			 <!-- <fileset file="lib/*.jar"/> -->
+			  
 		</jar> 
+		 <copy todir="${dist}/lib">
+		       <fileset dir="lib"/>
+		 	   <fileset file="*.html"/>
+		 </copy> 
 	</target>
 
 	<target name="clean" description="clean up">
