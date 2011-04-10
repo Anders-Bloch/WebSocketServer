@@ -40,8 +40,8 @@ public class WebSocketClient implements Runnable, Client {
 			
 			while(true) {
 				int b = in.read();
-				//if(b == 0xff) { 	//PC
-				if(b == 711) { 	//MAC OS
+				if(b == 0xff) { 	//PC
+				//if(b == 711) { 	//MAC OS
 				//if(b == 48) { 		//JMeter Test
 					builder = new StringBuilder();
 					for (Integer i : input) {
@@ -66,7 +66,7 @@ public class WebSocketClient implements Runnable, Client {
 		out.write(0x00);
 		out.write(event.getBytes());
 		out.write(0xFF);
-		out.write("!".getBytes()); //Jmeter
+		//out.write("!".getBytes()); //Jmeter
 		out.flush();
 	}
 }

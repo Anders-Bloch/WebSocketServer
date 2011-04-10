@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ServerThreadPoolImpl implements ServerThreadPool {
 
+	//Meget h¿jt pga. JMeter tests
 	private final int poolSize = 200;
 	private final int maxPoolSize = 300;
 	private final long keepAliveTime = 10;
