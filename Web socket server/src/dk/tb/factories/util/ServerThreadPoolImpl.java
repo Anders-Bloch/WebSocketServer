@@ -6,10 +6,10 @@ import java.util.concurrent.TimeUnit;
 
 public class ServerThreadPoolImpl implements ServerThreadPool {
 
-	private final int poolSize = 50;
-	private final int maxPoolSize = 110;
+	private final int poolSize = 200;
+	private final int maxPoolSize = 300;
 	private final long keepAliveTime = 10;
-    private final ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(50);
+    private final ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(300);
     private final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(poolSize,maxPoolSize,keepAliveTime,TimeUnit.SECONDS,queue);
 	
 	@Override

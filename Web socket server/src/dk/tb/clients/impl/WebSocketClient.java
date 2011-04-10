@@ -41,8 +41,8 @@ public class WebSocketClient implements Runnable, Client {
 			while(true) {
 				int b = in.read();
 				//if(b == 0xff) { 	//PC
-				//if(b == 711) { 	//MAC OS
-				if(b == 48) { 		//JMeter Test
+				if(b == 711) { 	//MAC OS
+				//if(b == 48) { 		//JMeter Test
 					builder = new StringBuilder();
 					for (Integer i : input) {
 						builder.append(Character.toChars(i));
@@ -62,10 +62,11 @@ public class WebSocketClient implements Runnable, Client {
     
     public void event(String event) throws IOException {
     	logger.info("Writing to stream, object:" + out.toString());
-		out.flush();
+		//out.flush();
 		out.write(0x00);
 		out.write(event.getBytes());
 		out.write(0xFF);
+		out.write("!".getBytes()); //Jmeter
 		out.flush();
 	}
 }

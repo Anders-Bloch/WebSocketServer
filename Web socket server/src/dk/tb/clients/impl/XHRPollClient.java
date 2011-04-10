@@ -25,6 +25,7 @@ public class XHRPollClient implements Client {
 		out.write((event.length()+"").getBytes());
 		out.write("\r\n\r\n".getBytes());
 		out.write(event.getBytes());
+		//out.write("!".getBytes()); //JMeter test
 		out.flush();
 		socket.close();
 	}

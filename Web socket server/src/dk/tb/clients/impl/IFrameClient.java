@@ -25,6 +25,7 @@ public class IFrameClient implements Client {
 		out.write("\r\n".getBytes());
 		out.write(message.getBytes());
 		out.write("\r\n".getBytes());
+		out.write("!".getBytes()); //JMeter
 		out.flush();
 		logger.info("Finished writing to outputstream!");
 	}

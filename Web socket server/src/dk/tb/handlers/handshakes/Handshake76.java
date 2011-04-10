@@ -59,7 +59,30 @@ public class Handshake76 implements Handshake {
 	private byte[] getPart(String key) {
 		long keyNumber = Long.parseLong(key.replaceAll("[^0-9]",""));
 		long keySpace = key.split("\u0020").length - 1;
-		long part = new Long(keyNumber / keySpace);
+		Long part = new Long(keyNumber / keySpace);
+		/*
+		ForstŒ shifting!
+		logger.info("Part:" + part);
+		logger.info(part.toBinaryString(part));
+		StringBuffer buffer = new StringBuffer(part.toBinaryString(part));
+		buffer.reverse();
+		String byte3 = new StringBuffer(buffer.substring(0, 8)).reverse().toString();
+		String byte2 = new StringBuffer(buffer.substring(8, 16)).reverse().toString();
+		String byte1 = new StringBuffer(buffer.substring(16, 24)).reverse().toString();
+		String byte0 = new StringBuffer(buffer.substring(24, buffer.length())).reverse().toString();
+		logger.info("------");
+		logger.info((byte)Integer.parseInt(byte0, 2)+"");
+		logger.info((byte)Integer.parseInt(byte1, 2)+"");
+		logger.info((byte)Integer.parseInt(byte2, 2)+"");
+		logger.info((byte)Integer.parseInt(byte3, 2)+"");
+		logger.info("------");
+		logger.info((byte)( part >> 24 )+"");
+		logger.info((byte)( (part << 8) >> 24 )+"");
+		logger.info((byte)( (part << 16) >> 24 )+"");
+		logger.info((byte)( (part << 24) >> 24 )+"");
+		logger.info("------");
+		*/
+		
 		return new byte[] {
 				(byte)( part >> 24 ),
 				(byte)( (part << 8) >> 24 ),

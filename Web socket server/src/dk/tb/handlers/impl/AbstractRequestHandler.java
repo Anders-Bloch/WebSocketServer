@@ -42,7 +42,7 @@ public abstract class AbstractRequestHandler implements RequestHandler {
 			StringBuilder builder = readInput(
 					new BufferedReader(new InputStreamReader(socket.getInputStream())));
 			if(builder.toString().length() < 10) {
-				out.write("HTTP/1.1 400 OK\r\nExpires: -1\r\nCache-Control: private, max-age=0\r\nContent-Type: application/json; charset=UTF-8".getBytes());
+				out.write("HTTP/1.1 400 OK\r\nExpires: -1\r\nCache-Control: private, max-age=0\r\nContent-Type: text/html; charset=UTF-8".getBytes());
 				out.flush();
 				socket.close();
 			} else {
@@ -73,7 +73,7 @@ public abstract class AbstractRequestHandler implements RequestHandler {
 		this.socket = socket;
 	}
 
-	/*protected StringBuilder readInput(BufferedReader in) throws IOException {
+	protected StringBuilder readInput(BufferedReader in) throws IOException {
 		StringBuilder builder = new StringBuilder();
 		while(builder.indexOf("\r\n\r\n") == -1) {
 			builder.append(Character.toChars(in.read()));
@@ -84,13 +84,14 @@ public abstract class AbstractRequestHandler implements RequestHandler {
 			}
 		}
 		return builder;
-	}*/
+	}
 
-	protected StringBuilder readInput(BufferedReader in) throws IOException {
+	//Benyttes til JMeter tests
+	/*protected StringBuilder readInput(BufferedReader in) throws IOException {
 		StringBuilder builder = new StringBuilder();
 		while(in.ready()) {
 			builder.append(Character.toChars(in.read()));
 		}
 		return builder;
-	}
+	}*/
 }
