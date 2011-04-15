@@ -27,9 +27,7 @@ public class WebSocketRequestHandler extends AbstractRequestHandler {
 
 	private void writeOutput(OutputStream out, Map<Keys, String> header) throws IOException {
 		byte[] bytes = handshake.createResponseHandshake(header);
-		for (int i = 0; i < bytes.length; i++) {
-			out.write(bytes[i]);
-		}
+		out.write(bytes);
 		out.flush();
 	}
 

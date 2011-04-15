@@ -18,7 +18,7 @@ public class CommonClientPool implements ClientPool {
 	private Set<Client> clients = new HashSet<Client>();
 	private Set<Client> clientsToRemove = new HashSet<Client>();
 	
-	public void addClient(Client client) {
+	public synchronized void addClient(Client client) {
 		logger.info("Client added to pool: " + client);
 		clients.add(client);
 	}

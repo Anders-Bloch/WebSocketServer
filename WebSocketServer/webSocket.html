@@ -1,0 +1,97 @@
+<html>
+	<header>
+		<title>WebSocketTest</title>
+		<script type="text/javascript" >
+			var ws;
+			function conn() {
+				try {
+					ws = new WebSocket("ws://localhost");
+					ws.onopen = function() {
+						var message = document.createTextNode('Web Socket is connected.');
+						var messageDiv = document.getElementById('message')
+						messageDiv.appendChild(message);
+					};
+					ws.onmessage = function (evt) { 
+						var received_msg = evt.data;
+						var xy = received_msg.split(',');
+						addClick(xy[0], xy[1] , true);
+						redraw();
+					};
+					ws.onclose = function(e) {
+						// websocket is closed.
+						alert('conn closed: ' + e);
+					};
+					ws.onerror = function(e) {
+						alert("on error:" + e);
+					};
+				} catch(e) {
+					alert("General catch" + e);
+				}
+			}
+		</script>
+	</header>
+	<body>
+		<input id="button" onClick="javascript:conn();" name="button" type="button" value="Connect to server" />
+		
+		<canvas id="canvas" width="800px" height="600px" style="border: 1px solid #3d3d3d;" />
+
+		<script type="text/javascript" >
+			var canvas = document.getElementById('canvas');
+			var context = canvas.getContext("2d");
+			var clickX = new Array();
+			var clickY = new Array();
+			var clickDrag = new Array();
+			var paint;
+
+			canvas.onmousedown = function(e) {
+				var mouseX = e.pageX - this.offsetLeft;
+				var mouseY = e.pageY - this.offsetTop;
+				paint = true;
+				addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
+				redraw();
+			};
+			
+			canvas.onmousemove = function(e) {
+				if(paint){
+					var x = e.pageX - this.offsetLeft;
+					var y = e.pageY - this.offsetTop;
+					javascript:ws.send(x+','+y);
+				}
+			};
+			
+			canvas.onmouseup = function(e) {
+				paint = false;
+			};
+			
+			canvas.onmouseleave = function(e) {
+				paint = false;
+			};
+			
+
+			function addClick(x, y, dragging) {
+			  clickX.push(x);
+			  clickY.push(y);
+			  clickDrag.push(dragging);
+			}
+			
+			function redraw() {
+				canvas.width = canvas.width; // Clears the canvas
+				context.strokeStyle = "#df4b26";
+				context.lineJoin = "round";
+				context.lineWidth = 5;
+				for(var i=0; i < clickX.length; i++) {		
+					context.beginPath();
+					if(clickDrag[i] && i){
+						context.moveTo(clickX[i-1], clickY[i-1]);
+					} else {
+						context.moveTo(clickX[i]-1, clickY[i]);
+					}
+					context.lineTo(clickX[i], clickY[i]);
+					context.closePath();
+					context.stroke();
+				}
+			}
+		</script>
+	</body>
+</html>
+
