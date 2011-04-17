@@ -5,7 +5,7 @@
 			var ws;
 			function conn() {
 				try {
-					ws = new WebSocket("ws://localhost");
+					ws = new WebSocket("ws://" + document.domain);
 					ws.onopen = function() {
 						var message = document.createTextNode('Web Socket is connected.');
 						var messageDiv = document.getElementById('message')
@@ -33,7 +33,7 @@
 	<body>
 		<input id="button" onClick="javascript:conn();" name="button" type="button" value="Connect to server" />
 		
-		<canvas id="canvas" width="800px" height="600px" style="border: 1px solid #3d3d3d;" />
+		<canvas id="canvas" width="800px" height="600px" style="border: 1px solid #3d3d3d; cursor.onmousedown: crosshair;" />
 
 		<script type="text/javascript" >
 			var canvas = document.getElementById('canvas');

@@ -4,13 +4,16 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Singleton;
+
+@Singleton
 public class ServerThreadPoolImpl implements ServerThreadPool {
 
 	//Meget h¿jt pga. JMeter tests
-	private final int poolSize = 200;
-	private final int maxPoolSize = 300;
+	private final int poolSize = 10;
+	private final int maxPoolSize = 20;
 	private final long keepAliveTime = 10;
-    private final ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(300);
+    private final ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(25);
     private final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(poolSize,maxPoolSize,keepAliveTime,TimeUnit.SECONDS,queue);
 	
 	@Override

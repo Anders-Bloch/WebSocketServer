@@ -3,48 +3,40 @@ package dk.tb.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import org.jboss.weld.environment.se.events.ContainerInitialized;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dk.tb.factories.util.ServerThreadPool;
-import dk.tb.factories.util.ThreadPoolFactory;
+import dk.tb.requesthandlers.Handler;
 
-
+@Singleton
 public class WebSocketServer {
 
-	ServerThreadPool threadPool = ThreadPoolFactory.getThreadPool();
+	@Inject Instance<Handler> handlerInstance;
+	@Inject ServerThreadPool threadPool;
+
+	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	private Set<Client> clients = Collections.synchronizedSet(new HashSet<Client>()); 
-	
-	public WebSocketServer() throws IOException {
+	public void runServer(@Observes ContainerInitialized event) throws IOException {
+		logger.info("Starting server");
 		ServerSocket serverSocket = new ServerSocket(80);
+		serverSocket.setReceiveBufferSize(255);
 		while(true) {
+			logger.info("Running server!");
 			Socket socket = serverSocket.accept();
-			Client c = new Client(socket, this);
-			clients.add(c);
-			threadPool.runTask(c);
+			socket.setSendBufferSize(255);
+			System.out.println(socket.getSendBufferSize());
+			System.out.println(socket.getReceiveBufferSize());
+			Handler requestHandler = handlerInstance.get();
+			requestHandler.handleRequest(socket);
+			threadPool.runTask(requestHandler);
 		}
-	}
-	
-	/**
-	 * @param args
-	 * @throws IOException 
-	 */
-	public static void main(String[] args) throws IOException {
-		new WebSocketServer();
-	}
-	
-	public void callAll(String s) {
-		Set<Client> clientsToRemove = new HashSet<Client>();
-		for (Client c : clients) {
-			try {
-				c.event(s);
-			} catch(Exception e) {
-				clientsToRemove.add(c);
-			}
-		}
-		clients.removeAll(clientsToRemove);
 	}
 }
