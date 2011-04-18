@@ -53,6 +53,7 @@ public class ClientImpl implements Client {
 	}
 	
 	public void event(String message) throws IOException {
+		logger.info("message received - updating client:"+this.hashCode());
 		OutputStream out = socket.getOutputStream();
 		out.write(0x00);
 		out.write(message.getBytes());
