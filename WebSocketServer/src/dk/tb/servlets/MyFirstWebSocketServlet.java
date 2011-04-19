@@ -1,5 +1,6 @@
 package dk.tb.servlets;
 
+@WebSocket
 public class MyFirstWebSocketServlet implements WebSocketServlet {
 
 	@Override

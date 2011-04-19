@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import dk.tb.factories.util.ServerThreadPool;
 import dk.tb.requesthandlers.Handler;
+import dk.tb.servlets.WebSocket;
 import dk.tb.servlets.WebSocketServlet;
 
 @Singleton
@@ -23,7 +24,7 @@ public class WebSocketServer {
 
 	@Inject Instance<Handler> handlerInstance;
 	@Inject ServerThreadPool threadPool;
-	@Inject Instance<WebSocketServlet> servletsInstance;
+	@Inject @WebSocket Instance<WebSocketServlet> servletsInstance;
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
