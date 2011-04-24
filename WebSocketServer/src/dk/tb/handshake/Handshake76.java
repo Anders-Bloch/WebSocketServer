@@ -1,20 +1,26 @@
 package dk.tb.handshake;
 
 import java.security.MessageDigest;
+import java.util.Arrays;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dk.tb.server.Keys;
+import dk.tb.server.RequestObject;
 
 @Singleton
 public class Handshake76 implements Handshake {
 	
-	public byte[] createResponseHandshake(Map<Keys, String> requestMap, byte[] key3) {
+	@Inject RequestObject requestObject;
+	
+	public byte[] createResponseHandshake() {
+		Map<Keys, String> requestMap = requestObject.getHeaderMap();
 		byte[] resKey = getResponseKey(
 				getPart(requestMap.get(Keys.KEY1)), 
 				getPart(requestMap.get(Keys.KEY2)),
-				key3);
+				getKey3());
 		byte[] header = getHeader(requestMap).getBytes();
 		int totalBytes = header.length + resKey.length;
 		byte[] result = new byte[totalBytes];
@@ -25,6 +31,12 @@ public class Handshake76 implements Handshake {
 			result[header.length + i] = resKey[i];
 		}
 		return result;
+	}
+
+	private byte[] getKey3() {
+		int length = requestObject.getRequesAsBytes().length;
+		return Arrays.copyOfRange(
+				requestObject.getRequesAsBytes(),length - 8, length) ;
 	}
 	
 	private String getHeader(Map<Keys, String> requestMap) {

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -16,20 +17,23 @@ import dk.tb.pools.ClientPool;
 @Named
 public class ClientImpl implements Client {
 	
-	private Socket socket;
-  	@Inject private ClientPool clientPool; 
+  	@Inject private ClientPool clientPool;
+  	@Inject @Default private RequestObject requestObject;
+  	private OutputStream out;
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	public void setFields(Socket socket) {
-		this.socket = socket;
-	}
-	
 	@Override
 	public void run() {
+		try {
+			out = requestObject.getOutputStream();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		logger.info("New Client started: " + this.hashCode());
 		try {
-			InputStream in = socket.getInputStream();
+			InputStream in = requestObject.getInputStream();
 			StringBuffer inBuilder = new StringBuffer();
 			while(true) {
 				byte b = (byte)in.read();
@@ -45,7 +49,7 @@ public class ClientImpl implements Client {
 			logger.error(e.getMessage());
 		} finally {
 			try {
-				socket.close();
+				requestObject.closeSocket();
 			} catch (IOException e) {
 				logger.error(e.getMessage());
 			}
@@ -53,8 +57,8 @@ public class ClientImpl implements Client {
 	}
 	
 	public void event(String message) throws IOException {
-		logger.info("message received - updating client:"+this.hashCode());
-		OutputStream out = socket.getOutputStream();
+		//logger.info("message received - updating client:"+this.hashCode() +"message:"+message);
+		out.flush();
 		out.write(0x00);
 		out.write(message.getBytes());
 		out.write(0xff);

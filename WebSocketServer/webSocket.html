@@ -33,7 +33,7 @@
 	<body>
 		<input id="button" onClick="javascript:conn();" name="button" type="button" value="Connect to server" />
 		<div id="message"></div>
-		<canvas id="canvas" width="800px" height="600px" style="border: 1px solid #3d3d3d; cursor.onmousedown: crosshair;" />
+		<canvas id="canvas" width="300px" height="200px" style="border: 1px solid #3d3d3d; cursor.onmousedown: crosshair;" />
 
 		<script type="text/javascript" >
 			var canvas = document.getElementById('canvas');
@@ -55,7 +55,7 @@
 				if(paint){
 					var x = e.pageX - this.offsetLeft;
 					var y = e.pageY - this.offsetTop;
-					javascript:ws.send(x+','+y);
+					ws.send(x+','+y);
 				}
 			};
 			

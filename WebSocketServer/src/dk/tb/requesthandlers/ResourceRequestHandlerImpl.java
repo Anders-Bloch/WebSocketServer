@@ -6,11 +6,6 @@ import java.io.IOException;
 public class ResourceRequestHandlerImpl implements ResourceRequestHandler {
 	
 	@Override
-	public boolean isResourceRequest(String path) {
-		return path.contains(".");
-	}
-	
-	@Override
 	public String resolveResource(String path) {
 		path = path.substring(1);
 		StringBuilder result = new StringBuilder();

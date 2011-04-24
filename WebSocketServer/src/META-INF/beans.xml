@@ -1,1 +1,5 @@
-<beans></beans>
+<beans>
+	<decorators>
+		<class>dk.tb.server.decorators.RequestHandlerDecorator</class>
+	</decorators>
+</beans>

@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 
 @Singleton
-public class ServerThreadPoolImpl implements ServerThreadPool {
+public class ThreadPoolImpl implements ThreadPool {
 
 	//Meget h¿jt pga. JMeter tests
 	private final int poolSize = 10;
