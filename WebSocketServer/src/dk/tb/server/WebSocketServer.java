@@ -28,9 +28,7 @@ public class WebSocketServer {
 							ThreadPool threadPool,
 							WeldContainer weld) throws IOException {
 		logger.info("Starting server");
-
 		ServerSocket serverSocket = new ServerSocket(80);
-
 		logger.info("Running server!");
 		while(true) {
 			Socket socket = serverSocket.accept();

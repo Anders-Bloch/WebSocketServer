@@ -35,14 +35,23 @@ public class NewConnectionStrategy implements RequestStrategy {
 	private void writeOutput() throws IOException {
 		OutputStream out = requestObject.getOutputStream();
 		byte[] response = handshake.createResponseHandshake();
+		//printResponse(response);
 		out.write(response);
 		out.flush();
 	}
 
+
 	private void startClient() throws IOException {
 		Client client = clientInstance.get();
-		clientPool.addClient(client);
+		clientPool.addClient(client, requestObject.getServletUri());
 		client.run();
+	}
+	
+	//Debugging
+	private void printResponse(byte[] response) {
+		for (byte b : response) {
+			System.out.print(Character.toChars(b));
+		}
 	}
 
 }

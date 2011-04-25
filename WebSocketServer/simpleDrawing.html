@@ -5,7 +5,7 @@
 			var ws;
 			function conn() {
 				try {
-					ws = new WebSocket("ws://" + document.domain);
+					ws = new WebSocket("ws://" + document.domain+"/SimpleDrawing");
 					ws.onopen = function() {
 						var message = document.createTextNode('Web Socket is connected.');
 						var messageDiv = document.getElementById('message')

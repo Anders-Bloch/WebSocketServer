@@ -1,9 +1,15 @@
 package dk.tb.servlets;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 public interface WebSocketServlet {
 	
-	public void socketEvent(byte[] bytes);
+	public void initServlet(OutputStream out) throws IOException ;
+
+	public void socketEvent(String event) throws IOException ;
 	
-	public void messageEvent(byte[] bytes);
+	public void messageEvent(String event) throws IOException ;
+	
 
 }

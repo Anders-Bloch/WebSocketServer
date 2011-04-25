@@ -97,5 +97,11 @@ public class RequestObject {
 		}
 	}
 	
+	public String getServletUri() {
+		String path = getHeaderMap().get(Keys.PATH);
+		String[] splitPath = path.split("/");
+		return splitPath[splitPath.length-1];
+	}
+	
 
 }

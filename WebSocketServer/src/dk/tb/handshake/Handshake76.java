@@ -45,7 +45,7 @@ public class Handshake76 implements Handshake {
 		builder.append(Keys.UPGRADE.getKey()+": " + requestMap.get(Keys.UPGRADE) + "\r\n");
 		builder.append(Keys.CONN.getKey()+": " + requestMap.get(Keys.CONN) + "\r\n");
 		builder.append(Keys.SEC_ORIGIN.getKey()+": " + requestMap.get(Keys.ORIGIN) + "\r\n");
-		builder.append(Keys.SEC_LOCATION.getKey()+": " + "ws://" + requestMap.get(Keys.HOST) + "/" + "\r\n");
+		builder.append(Keys.SEC_LOCATION.getKey()+": " + "ws://" + requestMap.get(Keys.HOST) + requestMap.get(Keys.PATH) + "\r\n");
 		builder.append("\r\n");
 		return builder.toString();
 	}

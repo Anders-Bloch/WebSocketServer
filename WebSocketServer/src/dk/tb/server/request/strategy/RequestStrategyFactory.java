@@ -17,7 +17,6 @@ public class RequestStrategyFactory {
 	@Produces @RequestScoped
 	public RequestStrategy getRequestStrategy() {
 		for (RequestStrategy req : instance) {
-			System.out.println(req.getType());
 			if(req.getType() == requestObject.getRequestType()) {
 				return req;
 			}
