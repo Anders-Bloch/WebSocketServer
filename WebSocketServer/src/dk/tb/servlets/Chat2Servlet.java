@@ -12,10 +12,11 @@ public class Chat2Servlet implements WebSocketServlet {
 
 	@Inject private ClientPool clientPool;
 	private OutputStream out;
+	private String id;
 	
 	@Override
 	public void socketEvent(String event) throws IOException {
-		clientPool.callClients(event, "chat2");
+		clientPool.callClients(event, "chat2",id);
 	}
 
 	@Override
@@ -27,8 +28,9 @@ public class Chat2Servlet implements WebSocketServlet {
 	}
 
 	@Override
-	public void initServlet(OutputStream out) throws IOException {
+	public void initServlet(OutputStream out, String id) throws IOException {
 		this.out = out;
+		this.id = id;
 	}
 
 }

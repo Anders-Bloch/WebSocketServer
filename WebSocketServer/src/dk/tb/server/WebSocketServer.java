@@ -40,5 +40,4 @@ public class WebSocketServer {
 			threadPool.runTask(requestHandler);
 		}
 	}
-	
 }

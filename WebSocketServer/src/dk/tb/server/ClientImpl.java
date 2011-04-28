@@ -36,7 +36,7 @@ public class ClientImpl implements Client {
 				}
 			}
 		}
-		webSocketServlet.initServlet(requestObject.getOutputStream());
+		webSocketServlet.initServlet(requestObject.getOutputStream(),this.hashCode()+"");
 		
 		logger.info("New Client started: " + this.hashCode());
 		//Read input and call input on servlet
@@ -51,7 +51,6 @@ public class ClientImpl implements Client {
 					inBuilder = new StringBuffer();
 				} else if((int)b != 0) {
 					try {
-						logger.info(b+"");
 						inBuilder.append((char)b);
 					} catch(Exception e) {
 						logger.warn("byte skiped:" + b);
@@ -66,6 +65,11 @@ public class ClientImpl implements Client {
 	public void event(String message) throws IOException {
 		//logger.info("message received - updating client:"+this.hashCode() +"message:"+message);
 		webSocketServlet.messageEvent(message);
+	}
+
+	@Override
+	public WebSocketServlet getWebSocketServlet() {
+		return webSocketServlet;
 	}
 
 }

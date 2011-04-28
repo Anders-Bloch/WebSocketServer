@@ -7,8 +7,8 @@ import javax.inject.Inject;
 
 import dk.tb.pools.ClientPool;
 
-@WebSocket(uri="chat1")
-public class Chat1Servlet implements WebSocketServlet {
+@WebSocket(uri="YellowStickers")
+public class YellowStickers implements WebSocketServlet {
 
 	@Inject private ClientPool clientPool;
 	private OutputStream out;
@@ -16,7 +16,8 @@ public class Chat1Servlet implements WebSocketServlet {
 	
 	@Override
 	public void socketEvent(String event) throws IOException {
-		clientPool.callClients(event, "chat1",id);
+		System.out.println(event);
+		clientPool.callClients(event, "YellowStickers",id);
 	}
 
 	@Override

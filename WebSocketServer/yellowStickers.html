@@ -1,7 +1,7 @@
 <html>
 	<header>
 		<title>Yellow Stickers</title>
-		<script type="text/javascript" >
+		<script type="text/javascript" ><!--
 			var ws;
 			function conn() {
 				try {
@@ -13,10 +13,21 @@
 					};
 					ws.onmessage = function (evt) { 
 						var received_msg = evt.data;
-						var txt = document.createTextNode(received_msg);
-						var li = document.createElement('li');
-						li.appendChild(txt);
-						document.getElementById('inputData').appendChild(li);
+						var msgArray = received_msg.split(':');
+						if(msgArray[0] == 'new') {
+							newSticker(msgArray[1]-1);
+						} else if(msgArray[0] == 'move') {
+							for(var i = 0; i < tasks.length; i++) {
+								if(tasks[i]) {
+									if(tasks[i].id == msgArray[1]) {
+										tasks[i].style.top = msgArray[2];
+										tasks[i].style.left = msgArray[3];
+									}
+								}
+							}
+						} else if(msgArray[0] == 'text') {
+							document.getElementById(msgArray[1]).value = msgArray[2];
+						}
 					};
 					ws.onclose = function() {
 						// websocket is closed.
@@ -30,21 +41,127 @@
 				}
 			}
 
-		</script>
+			document.onmousemove = mouseMove;
+
+			var dragObject  = null;
+			var mouseOffset = null;
+
+			function getMouseOffset(target, event){
+				event = event || window.event;
+
+				var docPos    = getPosition(target);
+				var mousePos  = mouseCoords(event);
+				return {x:mousePos.x - docPos.x, y:mousePos.y - docPos.y};
+			}
+
+			function getPosition(e){
+				var left = 0;
+				var top  = 0;
+
+				while (e.offsetParent){
+					left += e.offsetLeft;
+					top  += e.offsetTop;
+					e     = e.offsetParent;
+				}
+
+				left += e.offsetLeft;
+				top  += e.offsetTop;
+
+				return {x:left, y:top};
+			}
+
+			function mouseMove(event){
+				event = event || window.event;
+				var mousePos = mouseCoords(event);
+
+				if(dragObject){
+					dragObject.style.position = 'absolute';
+					dragObject.style.top      = (mousePos.y - mouseOffset.y);
+					dragObject.style.left     = ((mousePos.x - mouseOffset.x)/window.innerWidth*100)+'%';
+					return false;
+				}
+			}
+			
+			function makeDraggable(item){
+				if(!item) return;
+				item.onmousedown = function(event){
+					dragObject  = this;
+					mouseOffset = getMouseOffset(this, event);
+					return true;
+				}
+				item.onmouseup = function(event){
+					event = event || window.event;
+					var mousePos = mouseCoords(event);
+					dragObject.style.top = (Math.round((mousePos.y - mouseOffset.y)/100))*100;
+					dragObject.style.left = ((Math.round(((mousePos.x - mouseOffset.x)/window.innerWidth*100)/20))*20)+1+'%';
+					ws.send("move:"+dragObject.id+":"+dragObject.style.top+":"+dragObject.style.left);
+					dragObject = null;
+				}
+			}
+			
+			function mouseCoords(ev){
+				if(ev.pageX || ev.pageY){
+					return {x:ev.pageX, y:ev.pageY};
+				}
+				return {
+					x:ev.clientX + document.body.scrollLeft - document.body.clientLeft,
+					y:ev.clientY + document.body.scrollTop  - document.body.clientTop
+				};
+			}
+			var tasks = new Array();
+
+			function newSticker(id) {
+				var div = document.createElement('div');
+				div.style.backgroundColor = 'yellow';
+				div.style.border = '1px solid #000';
+				div.style.position = 'fixed';
+				div.style.width = '18%';
+				div.style.height = '100px';
+				div.id = id;
+				var textarea = document.createElement('textarea');
+				textarea.style.width = '100%';
+				textarea.style.height = '100%';
+				textarea.style.backgroundColor = 'yellow';
+				textarea.id = 'text'+id;
+				textarea.onkeyup = function() {
+					ws.send("text:"+this.id+":"+this.value);
+				}
+				div.appendChild(textarea);
+				makeDraggable(div);
+				document.getElementsByTagName('body')[0].appendChild(div);
+				tasks[id] = div;
+			}
+			function addSticker() {
+				newSticker(tasks.length);
+				ws.send("new:"+tasks.length);
+			}
+		--></script>
 	</header>
 	<body>
-		<input id="button" onClick="javascript:conn();" name="button" type="button" value="Connect to server" />
-		<div id="message">
+		<div id="message" style="height: 40px; width: 100%; background-color: white; border-bottom: 1px solid #000; align: right;">
+			<button id="newTask" onclick="javascript:addSticker();" >New sticker</button>
+			<input id="connect" onClick="javascript:conn();" name="button" type="button" value="Connect to server" />
 		</div>
-		<br >
-		<input id="text" name="text" type="text" value="" />
-		<input id="button2" onClick="javascript:ws.send(document.getElementById('text').value);document.getElementById('text').value = '';" name="button2" type="button" value="Say hello!" />
 		<div>
-			<ol id="inputData">
-			
-			</ol>	
+			<div style="left: 0%;  height: 100%; width: 20%; display: inline; border-right: 1px solid #000; position: absolute; text-align:center;">
+				New
+			</div>
+			<div style="left: 20%; height: 100%; width: 20%; display: inline; border-right: 1px solid #000; position: absolute; text-align:center;">
+				Started
+			</div>
+			<div style="left: 40%; height: 100%; width: 20%; display: inline; border-right: 1px solid #000; position: absolute; text-align:center;">
+				Waiting
+			</div>
+			<div style="left: 60%; height: 100%; width: 20%; display: inline; border-right: 1px solid #000; position: absolute; text-align:center;">
+				Test
+			</div>
+			<div style="left: 80%; height: 100%; width: 20%; display: inline; position: absolute; text-align:center;">
+				Solved
+			</div>
 		</div>
-		
 	</body>
+	<script type="text/javascript" >
+		makeDraggable(document.getElementById('testSticker'));
+	</script>
 </html>
 
