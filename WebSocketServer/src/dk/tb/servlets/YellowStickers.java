@@ -21,11 +21,7 @@ public class YellowStickers implements WebSocketServlet {
 	
 	@Override
 	public void socketEvent(String event) throws IOException {
-		System.out.println(event);
 		persistEvent(event);
-		for (Task task : tasks.values()) {
-			System.out.println(task);
-		}
 		clientPool.callClients(event, "YellowStickers",id);
 	}
 
@@ -36,20 +32,18 @@ public class YellowStickers implements WebSocketServlet {
 			tasks.put(eventSplit[1], new Task(eventSplit[1], "new"));
 		} else if("move".equalsIgnoreCase(func)) {
 			String id = eventSplit[1];
-			id = (Integer.parseInt(id)+1)+"";
 			tasks.get(id).state = eventSplit[2];
 		} else if("delete".equalsIgnoreCase(func)) {
 			String id = eventSplit[1];
-			id = (Integer.parseInt(id)+1)+"";
 			tasks.remove(id);
 		} else if("header".equalsIgnoreCase(func)) {
-			String id = eventSplit[1];
-			id = (Integer.parseInt(id.substring(6, id.length()))+1)+"";
-			tasks.get(id).header = eventSplit[2];
+			String id = eventSplit[1].substring(6, eventSplit[1].length());
+			if(eventSplit.length > 2)
+				tasks.get(id).header = eventSplit[2];
 		} else if("text".equalsIgnoreCase(func)) {
-			String id = eventSplit[1];
-			id = (Integer.parseInt(id.substring(4, id.length()))+1)+"";
-			tasks.get(id).text = eventSplit[2];
+			String id = eventSplit[1].substring(4, eventSplit[1].length());
+			if(eventSplit.length > 2)
+				tasks.get(id).text = eventSplit[2];
 		}
 	}
 
@@ -60,7 +54,6 @@ public class YellowStickers implements WebSocketServlet {
 		out.write(0xff);
 		out.flush();
 	}
-	
 
 	@Override
 	public void initServlet(OutputStream out, String id) throws IOException {
@@ -68,7 +61,6 @@ public class YellowStickers implements WebSocketServlet {
 		this.id = id;
 		if(tasks.size() > 0) {
 			StringBuffer buffer = new StringBuffer();
-			//buffer.append("state:");
 			for (Task task : tasks.values()) {
 				buffer.append(task.toString());
 				buffer.append(";");
@@ -88,14 +80,14 @@ public class YellowStickers implements WebSocketServlet {
 		public String text;
 		
 		public Task(String id, String state) {
-			super();
 			this.id = id;
 			this.state = state;
+			header = "";
+			text = "";
 		}
 		
 		public String toString() {
-			
-			return "id:" + (Integer.parseInt(id)-1) + ":state:" + state + ":header:" + header + ":text:" + text;
+			return "id:" + id + ":state:" + state + ":header:" + header + ":text:" + text;
 		}
 	}
 }
