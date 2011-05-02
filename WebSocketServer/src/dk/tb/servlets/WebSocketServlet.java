@@ -10,6 +10,5 @@ public interface WebSocketServlet {
 	public void socketEvent(String event) throws IOException ;
 	
 	public void messageEvent(String event) throws IOException ;
-	
 
 }
