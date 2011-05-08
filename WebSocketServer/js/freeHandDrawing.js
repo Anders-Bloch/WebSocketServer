@@ -105,28 +105,27 @@
     	     };
     	  };
     	  
-    	  drawingTools.pencilTool = function() {
-    		 this.inheritFrom = freehandTool; 
-    		 this.inheritFrom();
-    	  };
-    	 
-    	  drawingTools.brushTool = function() {
-      		 this.inheritFrom = freehandTool; 
-      		 this.inheritFrom();
-      		 this.lineWidth = 10;
-       	  };
-      	
-    	  drawingTools.eraserTool = function() {
-     		 this.inheritFrom = freehandTool; 
-     		 this.inheritFrom();
-     		 this.inkColor = "#ffffff"; 
-     		 this.lineWidth = 20;
-     		 //override the setInkColor method to do nothing
-     		 this.setInkColor = function(color){
-			};
-     	  };
+    	 //Pencil tool
+    	 drawingTools.pencilTool = function() {
+    	 };
+    	 drawingTools.pencilTool.prototype = new freehandTool();
+         	
+    	 //Brush tool 
+    	 drawingTools.brushTool = function() {
+       	 };
+       	 drawingTools.brushTool.prototype = new freehandTool();
+       	 drawingTools.brushTool.prototype.lineWidth = 10;
+       	
+       	
+    	 //Eraser tool 
+       	 drawingTools.eraserTool = function() {};
+     	 drawingTools.eraserTool.prototype =  new freehandTool();
+     	 drawingTools.eraserTool.prototype.inkColor = "#ffffff"; 
+     	 drawingTools.eraserTool.prototype.lineWidth = 20;
+     	 //override the setInkColor method to do nothing
+   	 	 drawingTools.eraserTool.prototype.setInkColor = function(color){};
      	
-     	  function canvas_event (ev) {
+     	 function canvas_event (ev) {
     	    if (ev.layerX || ev.layerX == 0) { // Firefox
     	      ev._x = ev.layerX;
     	      ev._y = ev.layerY;
