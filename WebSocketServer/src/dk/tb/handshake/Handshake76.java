@@ -5,12 +5,10 @@ import java.util.Arrays;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import dk.tb.server.Keys;
 import dk.tb.server.RequestObject;
 
-@Singleton
 public class Handshake76 implements Handshake {
 	
 	@Inject RequestObject requestObject;

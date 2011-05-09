@@ -11,7 +11,7 @@ import dk.tb.server.Keys;
 import dk.tb.server.RequestObject;
 import dk.tb.server.util.RequestType;
 
-@RequestStrategyQ
+@RequestStrategyQualifier
 public class ResourceStrategy implements RequestStrategy {
 
 	@Inject private ResourceRequestHandler resourceRequestHandler;

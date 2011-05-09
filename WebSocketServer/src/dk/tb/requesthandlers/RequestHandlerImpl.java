@@ -3,19 +3,18 @@ package dk.tb.requesthandlers;
 import java.io.IOException;
 import java.net.Socket;
 
-import javax.enterprise.inject.Instance;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dk.tb.server.request.strategy.RequestStrategyFactory;
+import dk.tb.server.request.strategy.RequestStrategy;
 
-@Named
 public class RequestHandlerImpl implements RequestHandler {
 	
-	@Inject private Instance<RequestStrategyFactory> factoryInstance;
+	@Inject @Default private RequestStrategy requestStrategy;
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -26,7 +25,7 @@ public class RequestHandlerImpl implements RequestHandler {
 	@Override
 	public void run() {
 		try {
-			factoryInstance.get().getRequestStrategy().request();
+			requestStrategy.request();
 		} catch(IOException e) {
 			logger.error(e.getMessage());
 		}

@@ -12,9 +12,9 @@ import dk.tb.server.RequestObject;
 public class RequestStrategyFactory {
 	
 	@Inject @Default RequestObject requestObject;
-	@Inject @RequestStrategyQ Instance<RequestStrategy> instance;
+	@Inject @RequestStrategyQualifier Instance<RequestStrategy> instance;
 	
-	@Produces @RequestScoped
+	@Produces @Default @RequestScoped
 	public RequestStrategy getRequestStrategy() {
 		for (RequestStrategy req : instance) {
 			if(req.getType() == requestObject.getRequestType()) {

@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import dk.tb.server.RequestObject;
 import dk.tb.server.util.RequestType;
-@RequestStrategyQ
+@RequestStrategyQualifier
 public class FaultyRequestStrategy implements RequestStrategy {
 
 	@Inject @Default RequestObject requestObject;

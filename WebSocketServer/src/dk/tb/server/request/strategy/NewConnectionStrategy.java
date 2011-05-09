@@ -13,7 +13,7 @@ import dk.tb.server.Client;
 import dk.tb.server.RequestObject;
 import dk.tb.server.util.RequestType;
 
-@RequestStrategyQ
+@RequestStrategyQualifier
 public class NewConnectionStrategy implements RequestStrategy {
 
 	@Inject @Default RequestObject requestObject;

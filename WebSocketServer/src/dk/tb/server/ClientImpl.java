@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import dk.tb.servlets.WebSocket;
 import dk.tb.servlets.WebSocketServlet;
 
-@Named
 public class ClientImpl implements Client {
 	
   	@Inject @Default private RequestObject requestObject;

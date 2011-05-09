@@ -108,7 +108,11 @@ function newSticker(id) {
 	textarea.className = 'text';
 	textarea.id = 'text'+id;
 	textarea.onkeyup = function() {
-		ws.send("text:"+this.id+":"+this.value);
+		var keyTimeout;
+		window.clearTimeout(keyTimeout);
+		keyTimeout = window.setTimeout(function(){
+			ws.send("text:"+this.id+":"+this.value);
+		},5350);
 	}
 	div.appendChild(textarea);
 
