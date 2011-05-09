@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+	<meta charset="utf-8">	
+    <title>UML Drawing</title> 
+    <script type="text/javascript" src="./js/UMLDrawing.js"></script>
+    
+    <style type="text/css">
+      #canvasPanel { position: relative; }
+      #mainCanvas { border: 1px solid #000; }
+      #tempCanvas { position: absolute; top: 1px; left: 1px; }
+    </style> 
+  </head> 
+  
+  <body> 
+    
+   <div id="canvasPanel" > 
+      <canvas id="mainCanvas" width="800" height="600"> 
+        This browser doesn't support canvas
+      </canvas> 
+    </div> 
+    <div id="textEntryPanel"  style="border: 1px solid #000; position:fixed ; display:none; left: 830px; top:200px;"> 
+    	 <label>Class name:  <input id="classNameInput" > </label><br>
+    	 <label>Class attributes:  <input id="classAttributesInput"> </label><br>
+    	 <label>Class operations:  <input id="classOperationsInput"> </label><br>
+         <button id="updateShapeText" onClick="updateActiveShapeText()">Update class text</button>
+    </div>
+   
+    <div id="toolsPanel"  style="position:absolute; left:830px; top:100px;"> 
+  
+    <label>UML tool: 
+    	<select id="toolSelector"> 
+        	<option value="classTool">Class</option> 
+        	<option value="lineTool">Line</option> 
+    		</select>
+    	</label> 
+  	 </div>
+ 	
+ <div  id="message" style="border: 1px solid #000; position:absolute; left:830px; top:10px; "> 
+ 		<input id="connect" onClick="javascript:conn();" name="button" type="button" value="Connect to server" />
+	</div>	
+ 
+ <script type="text/javascript">
+	if(window.addEventListener) {
+        	window.addEventListener('load', init(),false); 
+    };	
+  </script>
+</body>
+</html>

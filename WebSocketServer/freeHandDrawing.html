@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+	<meta charset="utf-8">	
+	<title>FreeHand Drawing</title>
+	<script type="text/javascript" src="./js/freeHandDrawing.js"></script>
+	<style type="text/css">
+    	#canvasPanel { position: relative; }
+		#colorsList li {height: 25px; width: 25px; display: block; cursor: pointer;}
+	</style>
+</head>
+<body>
+	<div id="canvasPanel" > 
+		<canvas id="freehandCanvas" width="800" height="600"
+			style="border: 1px solid #c3c3c3;">
+			Your browser does not support the canvas element.
+		</canvas>
+	</div>
+
+	<div  id="message" style="border: 1px solid #000; position:absolute; left:830px; top:10px; "> 
+ 		<input id="connect" onClick="javascript:conn();" name="button" type="button" value="Connect to server" />
+	</div>
+
+	<div id="toolPanel"  style="border: 1px solid #000; position:absolute; left:830px; top:70px; "> 
+		<label>Choose tool: <select id="toolSelector"
+					onchange="javascript:changeTool(this);">
+					<option value="pencilTool">Pencil</option>
+					<option value="brushTool">Brush</option>
+					<option value="eraserTool">Eraser</option>
+				</select> 
+		</label>
+		<br/> 
+		<label>Choose color:
+		<ul id="colorsList">
+					<li style="background-color: black;"
+						onclick="updateActiveColor('black');"></li>
+					<li style="background-color: red;"
+						onclick="updateActiveColor('red');"></li>
+					<li style="background-color: green;"
+						onclick="updateActiveColor('green');"></li>
+					<li style="background-color: yellow;"
+						onclick="updateActiveColor('yellow');"></li>
+					<li style="background-color: blue;"
+						onclick="updateActiveColor('blue');"></li>
+				</ul>
+		</label>		
+</div>		
+</body>
+
+<script type="text/javascript">
+if(window.addEventListener) {
+    	    	window.addEventListener('load', init(),false); 
+    	    };	
+</script>
+  
+</html>
