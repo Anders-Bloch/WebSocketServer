@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+	</head>
+	<body>
+		<header>
+			<input id="select" type="button" onClick="javascript:newTool(this,selectTool);" value="Select" />
+			<input id="move" type="button" onClick="javascript:newTool(this,moveTool);" value="Move" />
+			<input id="del" type="button" onClick="javascript:newTool(this,deleteTool);" value="Delete" />
+			<input id="newLine" type="button" onClick="javascript:newElement(this,lineElement);" value="New Line" />
+			<input id="newClass" type="button" onClick="javascript:newElement(this,classElement);" value="New Class" />
+		</header>
+		<div>
+			<canvas id="canvas" width="500" height="400" style="border: 1px solid black;"></canvas>
+		</div>
+	</body>
+	<script type="text/javascript" src="/js/umlSketch.js" ></script>
+	<script type="text/javascript" src="/js/umlTools.js" ></script>
+	<script type="text/javascript" src="/js/umlElements.js" ></script>
+</html>
