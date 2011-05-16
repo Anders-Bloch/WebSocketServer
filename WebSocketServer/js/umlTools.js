@@ -13,6 +13,7 @@ var selectTool = Object.create(uml, {
 			if(e.select(event) === true) {
 				selectedElement = e;
 				e.color = 'blue';
+				document.getElementById('headerName').value = e.header;
 			} else {
 				e.color = 'black';
 			}

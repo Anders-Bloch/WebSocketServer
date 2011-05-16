@@ -166,53 +166,53 @@ function drawShapes(){
 	context.clearRect(0, 0, canvas.width, canvas.height);
   };
   
-function umlTool(){
-  
-  	var tool = this;
-    this.started = false;
-	this.dragStarted = false;
-	
-    this.mousedown = function (ev) {
-      tool.started = true;
-      tool.x0 = ev._x;
-      tool.y0 = ev._y;
-	  deActivateTextEntryPanel();
-	  findActiveShape(ev);
-	  if(activeShapeIndex > -1){
-		tool.started = false;
-		tool.dragStarted = true;
-		loadActiveShapeText();
-		drawShapes();
-	  }
+function umlTool() {
+	var tool = this;
+   	this.started = false;
+   	this.dragStarted = false;
+
+   	this.mousedown = function (ev) {
+   		tool.started = true;
+   		tool.x0 = ev._x;
+   		tool.y0 = ev._y;
+   		deActivateTextEntryPanel();
+   		findActiveShape(ev);
+   		if(activeShapeIndex > -1){
+   			tool.started = false;
+   			tool.dragStarted = true;
+   			loadActiveShapeText();
+   			drawShapes();
+   		}
     };
 	
-	this.mouseup = function (ev) {
-      if (tool.started || tool.dragStarted) {
-        tool.mousemove(ev);
-		if(tool.started){
-			  w = Math.abs(ev._x - tool.x0),
-       	      h = Math.abs(ev._y - tool.y0);
-			  if (!w || !h) {
-				return;
-			  }
-			  addObject(new shapeObject (tool.x0,tool.y0, ev._x,ev._y,tool.toolType, ''),true);
-			  tool.started = false;
-		}
-		 	
-		if(tool.dragStarted){ 
-			ws.send(createServerMessage(shapesArray[activeShapeIndex],'move'));
-		}
-		tool.dragStarted = false;
-	    drawShapes();
-      }
+    this.mouseup = function (ev) {
+    	if (tool.started || tool.dragStarted) {
+    		tool.mousemove(ev);
+    		if(tool.started) {
+    			w = Math.abs(ev._x - tool.x0),
+    			h = Math.abs(ev._y - tool.y0);
+    			if (!w || !h) {
+    				return;
+    			}
+    			addObject(new shapeObject (tool.x0,tool.y0, ev._x,ev._y,tool.toolType, ''),true);
+    			tool.started = false;
+    		} 	
+    		if(tool.dragStarted){ 
+   				ws.send(createServerMessage(shapesArray[activeShapeIndex],'move'));
+    		}
+    		tool.dragStarted = false;
+    		drawShapes();
+    	}
     };
-  };
+ 
+};
   
-  // The classTool.
-  umlTools.classTool = function () {
+// The classTool.
+umlTools.classTool = function () {
     
 	this.inheritFrom = umlTool; 
     this.inheritFrom();
+    
     var tool = this;
 	tool.toolType = "class";
 

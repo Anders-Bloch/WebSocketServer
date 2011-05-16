@@ -30,7 +30,8 @@ var umlElement = {
 			y = event.offsetY;
 		return (x > this.startX && x < this.endX && y > this.startY && y < this.endY);
 	},
-	type : 'element'
+	type : 'element',
+	header: ''
 }
 
 var lineElement = Object.create(umlElement, {
@@ -38,16 +39,34 @@ var lineElement = Object.create(umlElement, {
 		context.strokeStyle = this.color;
 		context.beginPath(); 
 		context.moveTo(this.startX, this.startY); 
-		context.lineTo(this.endX, this.endY);
+		context.lineTo(this.endX, this.endY);		
 		context.stroke();
 	}}
 });
 
 var classElement = Object.create(umlElement, {
 	draw: {value : function(context) {
+		context.font = '14px Arial';
+		var w = context.measureText(this.header).width + 4;
+		if(w < 100)
+			w = 100;
 		context.strokeStyle = this.color;
-        var w = this.endX - this.startX,
-        	h = this.endY - this.startY;
-		context.strokeRect(this.startX, this.startY, w, h);
+		this.endX = this.startX + w;
+		this.endY = this.startY + 50;
+		context.save();
+		context.shadowOffsetX = 2;
+		context.shadowOffsetY = 2;
+		context.shadowBlur    = 2;
+		context.shadowColor   = 'rgba(0, 0, 0, 0.5)';
+		context.fillStyle = 'white';
+		context.fillRect(this.startX, this.startY, w, 50);
+		context.restore();
+		context.strokeRect(this.startX, this.startY, w, 50);
+		context.beginPath(); 
+		context.moveTo(this.startX, this.startY+20); 
+		context.lineTo(this.endX, this.endY-30);
+		context.stroke();
+		context.moveTo(this.startX, this.startY+20);
+		context.fillText(this.header, this.startX+2, this.startY+16);
 	}}
 });

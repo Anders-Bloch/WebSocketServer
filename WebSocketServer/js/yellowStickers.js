@@ -1,8 +1,7 @@
 /**
- * 
+ * Yellow stickers javascript file
  */
 var ws;
-
 function conn() {
 	try {
 		ws = new WebSocket("ws://"+document.domain+"/YellowStickers");
@@ -15,7 +14,7 @@ function conn() {
 			var received_msg = evt.data;
 			var msgArray = received_msg.split(':');
 			if(msgArray[0] == 'new') {
-				newSticker(msgArray[1]);
+				newSticker(msgArray[1],'','','new');
 			} else if(msgArray[0] == 'move') {
 				move(msgArray[1],document.getElementById(msgArray[2]));
 			} else if(msgArray[0] == 'text') {
@@ -29,62 +28,26 @@ function conn() {
 				var splitTasks = received_msg.split(';');
 				for(var i = 0; i < splitTasks.length-1; i++) {
 					var task = splitTasks[i].split(':');
-					var id = task[1];
-					var div = document.createElement('div');
-					div.draggable = 'true'; 
-					div.id = id;
-					div.className = 'sticker';
-
-					var label = document.createElement('p');
-					label.innerHTML = id;
-					label.className = 'stickerId';
-					div.appendChild(label);
-
-					var header = document.createElement('input');
-					header.type = 'text';
-					header.value = task[5];
-					header.id = 'header'+id;
-					header.className = 'header';
-					header.onkeyup = function() {
-						ws.send("header:"+this.id+":"+this.value);
-					}
-					div.appendChild(header);
-					
-					var textarea = document.createElement('textarea');
-					textarea.className = 'text';
-					textarea.innerHTML = task[7];
-					textarea.id = 'text'+id;
-					textarea.onkeyup = function() {
-						ws.send("text:"+this.id+":"+this.value);
-					}
-					div.appendChild(textarea);
-
-					div.ondragstart = function(event) {
-						event.dataTransfer.setData('Text', this.id);
-					}
-					var divId = task[3];
-					console.log(divId);
-					console.log(document.getElementById(divId));
-					document.getElementById(divId).appendChild(div);
-					tasks[id] = div;
+					newSticker(task[1], task[5], task[7], task[3]);
 				}
 			}
 		};
 		ws.onclose = function() {
-			// websocket is closed.
 			alert('conn closed');
 		};
 		ws.onerror = function(e) {
-			//alert("on error:" + e);
+			alert('conn closed');
 		};
 	} catch(e) {
 		alert("General catch" + e);
 	}
 }
 
+//Sticker state
 var tasks = new Array();
 
-function newSticker(id) {
+//Sticker CRUD functions
+function newSticker(id, headerText, bodyText, state) {
 	var div = document.createElement('div');
 	div.draggable = 'true'; 
 	div.id = id;
@@ -97,6 +60,7 @@ function newSticker(id) {
 
 	var header = document.createElement('input');
 	header.type = 'text';
+	header.value = headerText;
 	header.id = 'header'+id;
 	header.className = 'header';
 	header.onkeyup = function() {
@@ -106,43 +70,51 @@ function newSticker(id) {
 	
 	var textarea = document.createElement('textarea');
 	textarea.className = 'text';
+	textarea.innerHTML = bodyText;
 	textarea.id = 'text'+id;
 	textarea.onkeyup = function() {
-		var keyTimeout;
-		window.clearTimeout(keyTimeout);
-		keyTimeout = window.setTimeout(function(){
-			ws.send("text:"+this.id+":"+this.value);
-		},5350);
+		ws.send("text:"+this.id+":"+this.value);
 	}
 	div.appendChild(textarea);
 
 	div.ondragstart = function(event) {
 		event.dataTransfer.setData('Text', id);
 	} 
-	document.getElementById('new').appendChild(div);
+	document.getElementById(state).appendChild(div);
 	tasks[id] = div;
 }
+
 function addSticker() {
 	if(ws) {
 		var nextId = tasks.length;
-		newSticker(nextId);
+		newSticker(nextId,'','','new');
 		ws.send("new:" + nextId);
 	} else {
 		alert('You need to connect to the server before you can create new tasks!');
 	}
 }
+
+function deleteSticker(e) {
+	var dropId = e.dataTransfer.getData('Text');
+	var dropElement = document.getElementById(dropId);
+	dropElement.parentNode.removeChild(dropElement);
+	ws.send("delete:"+dropId);
+	e.preventDefault();
+}
+
+//Drag and drop
 function drop(target, e) {
-    var dropId = e.dataTransfer.getData('Text');
-  	move(dropId, target);
+	var dropId = e.dataTransfer.getData('Text');
+	move(dropId, target);
 	ws.send('move:'+dropId+':'+target.id);
-    e.preventDefault();
+	e.preventDefault();
 }
 
 function move(dropId, target) {
 	var dropElement = document.getElementById(dropId);
-    var children = target.getElementsByTagName('div');
-    if(children.length == 0) {
-	    target.appendChild(dropElement);
+	var children = target.getElementsByTagName('div');
+	if(children.length == 0) {
+		target.appendChild(dropElement);
 	} else {
 		var droped = false;
 		for(var i = 0; i < children.length; i++) {
@@ -154,15 +126,7 @@ function move(dropId, target) {
 			}
 		}
 		if(!droped) {
-		    target.appendChild(dropElement);
+			target.appendChild(dropElement);
 		}
 	}
-}
-
-function deleteSticker(e) {
-	var dropId = e.dataTransfer.getData('Text');
-	var dropElement = document.getElementById(dropId);
-	dropElement.parentNode.removeChild(dropElement);
-	ws.send("delete:"+dropId);
-	e.preventDefault();
 }

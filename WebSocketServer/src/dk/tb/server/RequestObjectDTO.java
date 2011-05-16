@@ -34,7 +34,11 @@ public class RequestObjectDTO implements RequestObject {
 		while(checkEnd(stringBuffer)) {
 			byte b = (byte)input.read();
 			byteBuffer.add(new Byte(b));
-			stringBuffer.append(Character.toChars(b));
+			try {
+				stringBuffer.append(Character.toChars(b));
+			} catch(IllegalArgumentException e) {
+				//We just don't add the character - TODO fix problem with illegal char! 
+			}
 		}
 		if(stringBuffer.toString().contains("WebSocket")) {
 			for (int i = 0; i < 8; i++) {

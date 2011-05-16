@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>SVG UML Sketch</title>
+	</head>
+	<body>
+		<input type="button" value="New class" onClick="javascript:newClass()" />
+		<svg id="svg1" xmlns="http://www.w3.org/2000/svg">
+			<g id="group1" onmousedown="javascript:selected(this);" onmouseup="deselected(this);" >
+				<rect x="0" y="0" height="50" width="100" style="stroke:#000000; fill:#fff;"  />
+				<text x="0" y="15" style="stroke: #660000; fill: #660000;">MyClass</text>
+				<line x1="0"  y1="20" x2="100" y2="20" style="stroke:#000000;"/>
+			</g>
+		</svg>
+	</body>
+	<script type="text/javascript" src="/js/umlSketchSVG.js" ></script>
+</html>

@@ -76,5 +76,15 @@ function newTool(button,tool) {
 	currentObject = Object.create(tool, {});
 	button.disabled = 'disabled';
 }
-
+function editHeader(textElement) {
+	if(selectedElement) {
+		selectedElement.header = textElement.value;
+		drawElements();
+	}
+}
+function editHeaderBlur(textElement) {
+	selectedElement.color = 'black';
+	selectedElement = null;
+	textElement.value = '';
+}
 

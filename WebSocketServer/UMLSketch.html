@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Insert title here</title>
+		<title>UML Sketch</title>
 	</head>
 	<body>
 		<header>
@@ -11,6 +11,7 @@
 			<input id="del" type="button" onClick="javascript:newTool(this,deleteTool);" value="Delete" />
 			<input id="newLine" type="button" onClick="javascript:newElement(this,lineElement);" value="New Line" />
 			<input id="newClass" type="button" onClick="javascript:newElement(this,classElement);" value="New Class" />
+			<input id="headerName" type="text" onblur="javascript:editHeaderBlur(this);" onKeyUp="javascript:editHeader(this);" style="width: 100px;" />
 		</header>
 		<div>
 			<canvas id="canvas" width="500" height="400" style="border: 1px solid black;"></canvas>
