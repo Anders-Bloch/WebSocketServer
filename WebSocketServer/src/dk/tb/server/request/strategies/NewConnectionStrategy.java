@@ -1,4 +1,4 @@
-package dk.tb.server.request.strategy;
+package dk.tb.server.request.strategies;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -7,11 +7,12 @@ import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import dk.tb.handshake.Handshake;
-import dk.tb.pools.ClientPool;
-import dk.tb.server.Client;
-import dk.tb.server.RequestObject;
-import dk.tb.server.util.RequestType;
+import dk.tb.server.request.Client;
+import dk.tb.server.request.ClientPool;
+import dk.tb.server.request.RequestObject;
+import dk.tb.server.request.RequestStrategy;
+import dk.tb.server.request.RequestStrategy.RequestStrategyQualifier;
+import dk.tb.server.request.strategies.handshake.Handshake;
 
 @RequestStrategyQualifier
 public class NewConnectionStrategy implements RequestStrategy {

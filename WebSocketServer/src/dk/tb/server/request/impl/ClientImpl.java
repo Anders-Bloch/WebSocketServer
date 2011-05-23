@@ -1,22 +1,21 @@
-package dk.tb.server;
+package dk.tb.server.request.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.annotation.Annotation;
 
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dk.tb.servlets.WebSocket;
+import dk.tb.server.request.Client;
+import dk.tb.server.request.RequestObject;
 import dk.tb.servlets.WebSocketServlet;
 
-public class ClientImpl implements Client {
+class ClientImpl implements Client {
 	
   	@Inject @Default private RequestObject requestObject;
 	@Inject @Any Instance<WebSocketServlet> servletInstances;
@@ -27,12 +26,9 @@ public class ClientImpl implements Client {
 	public void run() throws IOException {
 		//Find webSocketServlet.
 		for (WebSocketServlet servlet : servletInstances) {
-			Annotation[] annotations = servlet.getClass().getAnnotations();
-			for (Annotation annotation : annotations) {
-				if(annotation instanceof WebSocket && 
-				   ((WebSocket)annotation).uri().equalsIgnoreCase(requestObject.getServletUri())) {
-					webSocketServlet = servlet;
-				}
+			WebSocketServlet.WebSocket webSocket = servlet.getClass().getAnnotation(WebSocketServlet.WebSocket.class);
+			if(webSocket.uri().equalsIgnoreCase(requestObject.getServletUri())) {
+				webSocketServlet = servlet;
 			}
 		}
 		webSocketServlet.initServlet(requestObject.getOutputStream(),this.hashCode()+"");
@@ -62,13 +58,7 @@ public class ClientImpl implements Client {
 	}
 	
 	public void event(String message) throws IOException {
-		//logger.info("message received - updating client:"+this.hashCode() +"message:"+message);
 		webSocketServlet.messageEvent(message);
-	}
-
-	@Override
-	public WebSocketServlet getWebSocketServlet() {
-		return webSocketServlet;
 	}
 
 }

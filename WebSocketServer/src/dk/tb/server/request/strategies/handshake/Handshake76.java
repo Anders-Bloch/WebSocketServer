@@ -1,4 +1,4 @@
-package dk.tb.handshake;
+package dk.tb.server.request.strategies.handshake;
 
 import java.security.MessageDigest;
 import java.util.Arrays;
@@ -6,10 +6,10 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import dk.tb.server.Keys;
-import dk.tb.server.RequestObject;
+import dk.tb.server.request.Keys;
+import dk.tb.server.request.RequestObject;
 
-public class Handshake76 implements Handshake {
+class Handshake76 implements Handshake {
 	
 	@Inject RequestObject requestObject;
 	

@@ -1,12 +1,38 @@
-package dk.tb.requesthandlers;
+package dk.tb.server.request.strategies;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
 
-public class ResourceRequestHandlerImpl implements ResourceRequestHandler {
+import javax.enterprise.inject.Default;
+import javax.inject.Inject;
+
+import dk.tb.server.request.Keys;
+import dk.tb.server.request.RequestObject;
+import dk.tb.server.request.RequestStrategy;
+import dk.tb.server.request.RequestStrategy.RequestStrategyQualifier;
+
+@RequestStrategyQualifier
+public class ResourceStrategy implements RequestStrategy {
+
+	@Inject @Default RequestObject requestObject;
 	
 	@Override
-	public String resolveResource(String path) {
+	public void request() throws IOException {
+		String path = requestObject.getHeaderMap().get(Keys.PATH);
+		OutputStream out = requestObject.getOutputStream();
+		String output = resolveResource(path);
+		out.write(output.getBytes());
+		out.flush();
+		requestObject.closeSocket();
+	}
+	
+	@Override
+	public RequestType getType() {
+		return RequestType.RESOURCE;
+	}
+	
+	private String resolveResource(String path) {
 		path = path.substring(1);
 		StringBuilder result = new StringBuilder();
 		result.append("HTTP/1.1 200 OK\r\n");
@@ -33,4 +59,5 @@ public class ResourceRequestHandlerImpl implements ResourceRequestHandler {
 		}
 		return result.toString();
 	}
+
 }

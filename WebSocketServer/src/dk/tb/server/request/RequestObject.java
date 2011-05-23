@@ -1,4 +1,4 @@
-package dk.tb.server;
+package dk.tb.server.request;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Map;
 
-import dk.tb.server.util.RequestType;
 
 public interface RequestObject {
 
@@ -24,7 +23,7 @@ public interface RequestObject {
 
 	public void closeSocket() throws IOException;
 
-	public RequestType getRequestType();
+	public RequestStrategy.RequestType getRequestType();
 
 	public String getServletUri();
 

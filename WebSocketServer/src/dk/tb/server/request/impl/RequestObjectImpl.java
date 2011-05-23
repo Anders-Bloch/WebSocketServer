@@ -1,29 +1,30 @@
-package dk.tb.server;
+package dk.tb.server.request.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Default;
-import javax.inject.Inject;
 
-import dk.tb.server.util.RequestType;
+import dk.tb.server.request.Keys;
+import dk.tb.server.request.RequestObject;
+import dk.tb.server.request.RequestStrategy;
+
 @Default
 @RequestScoped
-public class RequestObjectDTO implements RequestObject {
+class RequestObjectImpl implements RequestObject {
 	
 	private Map<Keys, String> headerMap;
 	private byte[] requesAsBytes;
 	private String requestAsString;
 	private Socket socket;
 
-	@Inject private RequestHeaderMap requestHeaderMap;
-	
 	@Override
 	public void setUpObject(Socket socket) throws IOException {
 		this.socket = socket;
@@ -51,10 +52,10 @@ public class RequestObjectDTO implements RequestObject {
 		for (int i = 0; i < requesAsBytes.length; i++) {
 			requesAsBytes[i] = byteBuffer.get(i);
 		}
-		headerMap = requestHeaderMap.extractHeader(requestAsString);
+		headerMap = extractHeader(requestAsString);
 	}
 	
-	public RequestObjectDTO() {}
+	public RequestObjectImpl() {}
 	
 	@Override
 	public Map<Keys, String> getHeaderMap() {
@@ -96,15 +97,15 @@ public class RequestObjectDTO implements RequestObject {
 	}
 	
 	@Override
-	public RequestType getRequestType() {
+	public RequestStrategy.RequestType getRequestType() {
 		if(requestAsString.length() < 1) {
-			return RequestType.FAULT;
+			return RequestStrategy.RequestType.FAULT;
 		} else {
 			String path = headerMap.get(Keys.PATH);
 			if(path != null && path.contains(".")) {
-				return RequestType.RESOURCE;
+				return RequestStrategy.RequestType.RESOURCE;
 			} else {
-				return RequestType.CONNECT_REQUEST;
+				return RequestStrategy.RequestType.CONNECT_REQUEST;
 			}
 		}
 	}
@@ -116,5 +117,30 @@ public class RequestObjectDTO implements RequestObject {
 		return splitPath[splitPath.length-1];
 	}
 	
+	public Map<Keys, String> extractHeader(String header) {
+	    String[] lines = header.split("\r?\n|\r");
+	    Map<Keys, String> result = new HashMap<Keys, String>();
+	    //Add path
+	    int start = lines[0].indexOf("GET")+4;
+	    int end = lines[0].indexOf("HTTP")-1;
+	    result.put(Keys.PATH, lines[0].substring(start, end).trim());
+	    //Add all : separated values
+	    int i = 1;
+	    while(i < lines.length) {
+	    	int index = lines[i].indexOf(":");
+	    	if(index != -1) {
+	    		String[] lineSplit = new String[] {
+	    				lines[i].substring(0, index), 
+	    				lines[i].substring(index+1, lines[i].length())};
+    			for (Keys key : Keys.values()) {
+    				if(key.getKey().equals(lineSplit[0])) {
+    					result.put(key,lineSplit[1].trim());
+    				}
+    			}
+	    	}
+	    	i++;
+	    }
+	    return result;
+	}
 
 }

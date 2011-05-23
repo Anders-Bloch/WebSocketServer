@@ -5,19 +5,18 @@ import java.io.OutputStream;
 
 import javax.inject.Inject;
 
-import dk.tb.pools.ClientPool;
-import dk.tb.server.Client;
+import dk.tb.server.ClientEvent;
 
-@WebSocket(uri="FreehandDrawing")
+@WebSocketServlet.WebSocket(uri="FreehandDrawing")
 public class FreehandDrawingServlet implements WebSocketServlet {
 
-	@Inject private ClientPool clientPool;
+	@Inject private ClientEvent clientEvent;
 	private OutputStream out;
 	private String id;
 	
 	@Override
 	public void socketEvent(String event) throws IOException {
-		clientPool.callClients(event, "FreehandDrawing", id);
+		clientEvent.callClients(event, "FreehandDrawing", id);
 	}
 
 	@Override

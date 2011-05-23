@@ -1,4 +1,4 @@
-package dk.tb.server.decorators;
+package dk.tb.server.request.decorators;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -15,8 +15,9 @@ import org.jboss.weld.context.bound.BoundRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dk.tb.requesthandlers.RequestHandler;
-import dk.tb.server.RequestObject;
+import dk.tb.server.request.RequestHandler;
+import dk.tb.server.request.RequestObject;
+
 @Decorator
 public class RequestHandlerDecorator implements RequestHandler {
 
@@ -29,7 +30,7 @@ public class RequestHandlerDecorator implements RequestHandler {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Override
-	public void addSocket(Socket socket) {
+	public void setSocket(Socket socket) {
 		this.socket = socket;
 	}
 

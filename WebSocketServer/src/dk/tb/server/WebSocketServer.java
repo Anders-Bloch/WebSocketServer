@@ -14,8 +14,8 @@ import org.jboss.weld.environment.se.events.ContainerInitialized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dk.tb.factories.util.ThreadPool;
-import dk.tb.requesthandlers.RequestHandler;
+import dk.tb.server.request.RequestHandler;
+import dk.tb.server.util.ThreadPool;
 
 @Singleton
 public class WebSocketServer {
@@ -27,15 +27,14 @@ public class WebSocketServer {
 	public void runServer(	@Observes ContainerInitialized event, 
 							ThreadPool threadPool,
 							WeldContainer weld) throws IOException {
-		logger.info("Starting server");
+
 		ServerSocket serverSocket = new ServerSocket(80);
 		logger.info("Running server!");
 		while(true) {
 			Socket socket = serverSocket.accept();
-			//socket.setSendBufferSize(10);
 			logger.info("accept new socket!");
 			RequestHandler requestHandler = handlerInstance.get();
-			requestHandler.addSocket(socket);
+			requestHandler.setSocket(socket);
 			logger.info("Socket added to request handler");
 			threadPool.runTask(requestHandler);
 		}

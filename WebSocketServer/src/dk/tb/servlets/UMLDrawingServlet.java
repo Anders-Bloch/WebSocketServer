@@ -5,18 +5,18 @@ import java.io.OutputStream;
 
 import javax.inject.Inject;
 
-import dk.tb.pools.ClientPool;
+import dk.tb.server.ClientEvent;
 
-@WebSocket(uri="UMLDrawing")
+@WebSocketServlet.WebSocket(uri="UMLDrawing")
 public class UMLDrawingServlet implements WebSocketServlet {
 
-	@Inject private ClientPool clientPool;
+	@Inject private ClientEvent clientEvent;
 	private OutputStream out;
 	private String id;
 	
 	@Override
 	public void socketEvent(String event) throws IOException {
-		clientPool.callClients(event, "UMLDrawing", id);
+		clientEvent.callClients(event, "UMLDrawing", id);
 	}
 
 	@Override

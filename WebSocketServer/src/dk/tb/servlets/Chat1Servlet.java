@@ -5,18 +5,18 @@ import java.io.OutputStream;
 
 import javax.inject.Inject;
 
-import dk.tb.pools.ClientPool;
+import dk.tb.server.ClientEvent;
 
-@WebSocket(uri="chat1")
+@WebSocketServlet.WebSocket(uri="chat1")
 public class Chat1Servlet implements WebSocketServlet {
 
-	@Inject private ClientPool clientPool;
+	@Inject private ClientEvent clientEvent;
 	private OutputStream out;
 	private String id;
 	
 	@Override
 	public void socketEvent(String event) throws IOException {
-		clientPool.callClients(event, "chat1",id);
+		clientEvent.callClients(event, "chat1",id);
 	}
 
 	@Override

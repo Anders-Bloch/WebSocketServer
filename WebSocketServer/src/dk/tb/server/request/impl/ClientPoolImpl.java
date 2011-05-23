@@ -1,17 +1,18 @@
-package dk.tb.pools;
+package dk.tb.server.request.impl;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import dk.tb.server.Client;
+import dk.tb.server.ClientEvent;
+import dk.tb.server.request.Client;
+import dk.tb.server.request.ClientPool;
 
 @Singleton
-public class ClientPoolImpl implements ClientPool {
+class ClientPoolImpl implements ClientPool, ClientEvent {
 	
 	private Map<String, Set<Client>> pool = new HashMap<String, Set<Client>>();
 	

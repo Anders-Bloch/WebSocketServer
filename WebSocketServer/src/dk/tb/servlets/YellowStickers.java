@@ -8,21 +8,21 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import dk.tb.pools.ClientPool;
+import dk.tb.server.ClientEvent;
 
-@WebSocket(uri="YellowStickers")
+@WebSocketServlet.WebSocket(uri="YellowStickers")
 public class YellowStickers implements WebSocketServlet {
 	
 	private static Map<String, Task> tasks = Collections.synchronizedMap(new HashMap<String, Task>());
 
-	@Inject private ClientPool clientPool;
+	@Inject private ClientEvent clientEvent;
 	private OutputStream out;
 	private String id;
 	
 	@Override
 	public void socketEvent(String event) throws IOException {
 		persistEvent(event);
-		clientPool.callClients(event, "YellowStickers",id);
+		clientEvent.callClients(event, "YellowStickers",id);
 	}
 
 	private void persistEvent(String event) {

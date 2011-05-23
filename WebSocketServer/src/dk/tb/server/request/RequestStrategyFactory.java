@@ -1,4 +1,4 @@
-package dk.tb.server.request.strategy;
+package dk.tb.server.request;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Default;
@@ -6,7 +6,8 @@ import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
-import dk.tb.server.RequestObject;
+import dk.tb.server.request.RequestStrategy.RequestStrategyQualifier;
+
 
 @RequestScoped
 public class RequestStrategyFactory {

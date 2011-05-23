@@ -1,4 +1,4 @@
-package dk.tb.factories.util;
+package dk.tb.server.util;
 
 public interface ThreadPool {
 	public void runTask(Runnable task);

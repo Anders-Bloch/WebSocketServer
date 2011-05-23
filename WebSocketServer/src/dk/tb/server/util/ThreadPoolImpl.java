@@ -1,4 +1,4 @@
-package dk.tb.factories.util;
+package dk.tb.server.util;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;

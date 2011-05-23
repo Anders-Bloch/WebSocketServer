@@ -1,16 +1,16 @@
-package dk.tb.requesthandlers;
+package dk.tb.server.request.handlers;
 
 import java.io.IOException;
 import java.net.Socket;
 
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dk.tb.server.request.strategy.RequestStrategy;
+import dk.tb.server.request.RequestHandler;
+import dk.tb.server.request.RequestStrategy;
 
 public class RequestHandlerImpl implements RequestHandler {
 	
@@ -19,7 +19,7 @@ public class RequestHandlerImpl implements RequestHandler {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Override
-	public void addSocket(Socket socket) {
+	public void setSocket(Socket socket) {
 	}
 
 	@Override

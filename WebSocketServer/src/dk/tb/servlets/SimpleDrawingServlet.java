@@ -5,18 +5,18 @@ import java.io.OutputStream;
 
 import javax.inject.Inject;
 
-import dk.tb.pools.ClientPool;
+import dk.tb.server.ClientEvent;
 
-@WebSocket(uri="SimpleDrawing")
+@WebSocketServlet.WebSocket(uri="SimpleDrawing")
 public class SimpleDrawingServlet implements WebSocketServlet {
 
-	@Inject private ClientPool clientPool;
+	@Inject private ClientEvent clientEvent;
 	private OutputStream out;
 	private String id;
 	
 	@Override
 	public void socketEvent(String event) throws IOException {
-		clientPool.callClients(event, "SimpleDrawing",id);
+		clientEvent.callClients(event, "SimpleDrawing",id);
 	}
 
 	@Override
