@@ -76,7 +76,7 @@
     	        ws.send(drawMessage)
     	      }
     	    };
-    	    this.DrawPoints =function(pathdata) {
+    	    this.drawPoints =function(pathdata) {
 			    context.beginPath();
     	         var allxy = pathdata.split(';');
     	         if(allxy.length > 1)
@@ -111,8 +111,7 @@
     	 drawingTools.pencilTool.prototype = new freehandTool();
          	
     	 //Brush tool 
-    	 drawingTools.brushTool = function() {
-       	 };
+    	 drawingTools.brushTool = function() {};
        	 drawingTools.brushTool.prototype = new freehandTool();
        	 drawingTools.brushTool.prototype.lineWidth = 10;
        	
@@ -150,7 +149,7 @@
     		  
     	  }
     	  function handleServerMessage(received_msg){
-    		  activeTool.DrawPoints(received_msg);
+    		  activeTool.drawPoints(received_msg);
     		}
 
     	  

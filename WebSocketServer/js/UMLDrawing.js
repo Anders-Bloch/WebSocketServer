@@ -49,7 +49,10 @@ function init () {
   	tool_selector.addEventListener('change', ev_tool_change, false);
     // Activate the default tool.
     activeTool = new  umlTools['classTool']();
+    
+    
     // Attach mouse event listeners.
+    //callback pattern
     canvas.addEventListener('mousedown', ev_canvas, false);
     canvas.addEventListener('mousemove', ev_canvas, false);
     canvas.addEventListener('mouseup',   ev_canvas, false);
@@ -69,7 +72,7 @@ function ev_canvas (ev) {
       func(ev);
     }
   }
-
+ 
 function ev_tool_change (ev) {
     if (umlTools[this.value]) {
       activeTool = new umlTools[this.value]();
@@ -185,24 +188,26 @@ function umlTool() {
    		}
     };
 	
-    this.mouseup = function (ev) {
-    	if (tool.started || tool.dragStarted) {
-    		tool.mousemove(ev);
-    		if(tool.started) {
-    			w = Math.abs(ev._x - tool.x0),
-    			h = Math.abs(ev._y - tool.y0);
-    			if (!w || !h) {
-    				return;
-    			}
-    			addObject(new shapeObject (tool.x0,tool.y0, ev._x,ev._y,tool.toolType, ''),true);
-    			tool.started = false;
-    		} 	
-    		if(tool.dragStarted){ 
-   				ws.send(createServerMessage(shapesArray[activeShapeIndex],'move'));
-    		}
-    		tool.dragStarted = false;
-    		drawShapes();
-    	}
+	this.mouseup = function (ev) {
+      if (tool.started || tool.dragStarted) {
+       // tool.mousemove(ev);
+		if(tool.started){
+			  w = Math.abs(ev._x - tool.x0),
+       	      h = Math.abs(ev._y - tool.y0);
+			  if (!w || !h) {
+				tool.started = false;
+				return;
+			  }
+			  addObject(new shapeObject (tool.x0,tool.y0, ev._x,ev._y,tool.toolType, ''),true);
+			  tool.started = false;
+		}
+		 	
+		if(tool.dragStarted){ 
+			ws.send(createServerMessage(shapesArray[activeShapeIndex],'move'));
+		}
+		tool.dragStarted = false;
+	    drawShapes();
+      }
     };
  
 };
@@ -220,8 +225,15 @@ umlTools.classTool = function () {
       if (!tool.started && !tool.dragStarted) {
         return;
       }
-		if(tool.started){
-     	 var x = Math.min(ev._x,  tool.x0),
+
+	  if(ev._x >= canvas.width-1 || ev._y >= canvas.height-1){
+		  tool.started = false;
+		  return;
+	  }
+
+      if(tool.started){
+        
+		var x = Math.min(ev._x,  tool.x0),
        	   y = Math.min(ev._y,  tool.y0),
        	   w = Math.abs(ev._x - tool.x0),
        	   h = Math.abs(ev._y - tool.y0);
@@ -289,6 +301,10 @@ umlTools.lineTool = function () {
     if (!tool.started && !tool.dragStarted) {
         return;
       }
+    if(ev._x >= canvas.width-1 || ev._y >= canvas.height-1){
+		  tool.started = false;
+		  return;
+	  }
 		if(tool.started){
      		context.clearRect(0, 0, canvas.width, canvas.height);
 		    context.beginPath();
